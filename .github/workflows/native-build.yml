@@ -51,15 +51,34 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Initialize Android emulator smoke log
+        run: |
+          mkdir -p build/qa
+          {
+            echo "workflow=Native Build"
+            echo "job=android"
+            echo "run_number=${{ github.run_number }}"
+            echo "run_id=${{ github.run_id }}"
+            echo "commit=${{ github.sha }}"
+            echo "branch=${{ github.ref_name }}"
+            echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "emulator_api_level=30"
+            echo "emulator_profile=pixel_2"
+            echo "package_id=com.wellnessmaker.pocketmemorypet"
+            echo "launch_result=not_run"
+            echo "failure_reason=emulator_step_not_completed"
+          } > build/qa/android-emulator-smoke.txt
+
       - name: Smoke launch Android debug APK
-        timeout-minutes: 15
+        timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
-          target: google_apis
+          api-level: 30
+          target: default
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save -no-snapshot-load
           disable-animations: true
           script: |
             set -euo pipefail
@@ -85,7 +104,7 @@ jobs:
                 echo "commit=${{ github.sha }}"
                 echo "branch=${{ github.ref_name }}"
                 echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-                echo "emulator_api_level=35"
+                echo "emulator_api_level=30"
                 echo "emulator_profile=pixel_2"
                 echo "package_id=$package_id"
                 echo "apk_path=$apk"
