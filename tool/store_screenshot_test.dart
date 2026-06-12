@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pocket_memory_pet/core/theme/app_theme.dart';
@@ -185,15 +183,12 @@ Future<void> _captureScreen(
   await tester.pump(capture.settle);
   await capture.beforeCapture?.call(tester);
 
-  final boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-  final image = await boundary.toImage();
-  final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-  image.dispose();
-  final bytes = byteData!.buffer.asUint8List();
-
-  final output = File('build/store_screenshots/${size.name}/${capture.name}.png');
-  output.parent.createSync(recursive: true);
-  output.writeAsBytesSync(bytes);
+  final outputDirectory = Directory('build/store_screenshots/${size.name}');
+  outputDirectory.createSync(recursive: true);
+  await expectLater(
+    find.byKey(key),
+    matchesGoldenFile('../build/store_screenshots/${size.name}/${capture.name}.png'),
+  );
 }
 
 Future<void> _pauseJumpStar(WidgetTester tester) async {
