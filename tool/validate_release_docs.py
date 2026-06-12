@@ -34,6 +34,7 @@ BANNED_MARKETING_TERMS = [
 
 REQUIRED_RELEASE_REFERENCES = [
     "android-debug-apk-<run_number>",
+    "android-emulator-smoke-<run_number>",
     "android-release-aab-<run_number>",
     "android-qa-manifest-<run_number>",
     "ios-simulator-app-<run_number>",
@@ -103,6 +104,10 @@ def main() -> int:
         errors.append("Native workflow must upload Pocket-Memory-Pet-simulator.app.zip.")
     if "Pocket-Memory-Pet-release-nocodesign.app.zip" not in workflow:
         errors.append("Native workflow must upload Pocket-Memory-Pet-release-nocodesign.app.zip.")
+    if "reactivecircus/android-emulator-runner@v2" not in workflow:
+        errors.append("Native workflow must run Android emulator smoke evidence.")
+    if "android-emulator-smoke-${{ github.run_number }}" not in workflow:
+        errors.append("Native workflow must upload android-emulator-smoke-<run_number>.")
 
     ci_workflow = read(Path(".github/workflows/ci.yml"))
     if "tool/generate_brand_assets.py --force" not in ci_workflow:

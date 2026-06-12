@@ -45,6 +45,7 @@ Use the latest successful Native Build workflow artifacts for installable QA bui
 - `release-evidence-<run_number>` for the pre-QA artifact verification report.
 - `android-debug-apk-<run_number>` for Android device smoke testing.
 - `android-release-aab-<run_number>` for Play Console upload rehearsal.
+- `android-emulator-smoke-<run_number>` for CI install/launch smoke evidence.
 - `brand-assets-<run_number>` for Play icon, feature graphic, source brand art, and `brand_asset_manifest.txt`.
 - `ios-simulator-app-<run_number>` for iOS simulator smoke testing.
 - `ios-simulator-smoke-<run_number>` for CI install/launch smoke evidence.

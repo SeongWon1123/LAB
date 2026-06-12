@@ -59,6 +59,7 @@ The repository also includes a native build workflow that generates Android/iOS 
 
 - Android debug APK
 - Android release AAB
+- Android emulator install/launch smoke
 - iOS simulator build
 - iOS release build without code signing
 - Android/iOS QA manifest artifacts

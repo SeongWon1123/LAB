@@ -60,3 +60,4 @@
 - [x] Add draft store screenshot manifests with checksums.
 - [x] Add generated store brand assets and brand asset manifests.
 - [x] Add release artifact download and checksum verification script.
+- [x] Add Android emulator install and launch smoke evidence.

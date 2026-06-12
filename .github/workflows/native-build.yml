@@ -51,6 +51,98 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Smoke launch Android debug APK
+        timeout-minutes: 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            set -euo pipefail
+            package_id="com.wellnessmaker.pocketmemorypet"
+            apk="build/app/outputs/flutter-apk/app-debug.apk"
+            smoke_log="build/qa/android-emulator-smoke.txt"
+            screenshot="/sdcard/pocket-memory-pet-smoke.png"
+            pulled_screenshot="build/qa/android-emulator-smoke.png"
+            mkdir -p build/qa
+
+            launch_result="failed"
+            launch_output=""
+            pid=""
+            installed_path=""
+
+            cleanup() {
+              code=$?
+              {
+                echo "workflow=Native Build"
+                echo "job=android"
+                echo "run_number=${{ github.run_number }}"
+                echo "run_id=${{ github.run_id }}"
+                echo "commit=${{ github.sha }}"
+                echo "branch=${{ github.ref_name }}"
+                echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+                echo "emulator_api_level=35"
+                echo "emulator_profile=pixel_2"
+                echo "package_id=$package_id"
+                echo "apk_path=$apk"
+                echo "installed_path=$installed_path"
+                echo "launch_result=$launch_result"
+                echo "process_id=$pid"
+                echo "launch_output=$(printf '%s' "$launch_output" | tr '\n' ' ')"
+                if [ -f "$pulled_screenshot" ]; then
+                  echo "screenshot=android-emulator-smoke.png"
+                  echo "screenshot_size_bytes=$(stat -c%s "$pulled_screenshot")"
+                  echo "screenshot_sha256=$(sha256sum "$pulled_screenshot" | awk '{print $1}')"
+                fi
+              } > "$smoke_log"
+              echo "ANDROID_EMULATOR_LAUNCH_RESULT=$launch_result" >> "$GITHUB_ENV"
+              echo "ANDROID_EMULATOR_PACKAGE=$package_id" >> "$GITHUB_ENV"
+              exit "$code"
+            }
+            trap cleanup EXIT
+
+            if [ ! -f "$apk" ]; then
+              echo "Android debug APK does not exist: $apk"
+              exit 1
+            fi
+
+            adb devices
+            adb install -r "$apk"
+            installed_path="$(adb shell pm path "$package_id" | tr -d '\r' || true)"
+            if [ -z "$installed_path" ]; then
+              echo "Package was not installed: $package_id"
+              exit 1
+            fi
+
+            launch_output="$(adb shell monkey -p "$package_id" -c android.intent.category.LAUNCHER 1 2>&1 | tr -d '\r')"
+            sleep 8
+            pid="$(adb shell pidof "$package_id" | tr -d '\r' || true)"
+            if [ -z "$pid" ]; then
+              adb logcat -d -t 250 > build/qa/android-emulator-logcat.txt || true
+              echo "Android app process was not running after launch."
+              exit 1
+            fi
+
+            adb shell screencap -p "$screenshot" || true
+            adb pull "$screenshot" "$pulled_screenshot" || true
+            launch_result="passed"
+
+      - name: Upload Android emulator smoke log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-emulator-smoke-${{ github.run_number }}
+          path: |
+            build/qa/android-emulator-smoke.txt
+            build/qa/android-emulator-smoke.png
+            build/qa/android-emulator-logcat.txt
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Write Android QA manifest
         if: always()
         run: |
@@ -73,6 +165,9 @@ jobs:
             echo "release_aab_path=$release_aab"
             echo "release_aab_size_bytes=$(stat -c%s "$release_aab")"
             echo "release_aab_sha256=$(sha256sum "$release_aab" | awk '{print $1}')"
+            echo "android_emulator_smoke_artifact=android-emulator-smoke-${{ github.run_number }}"
+            echo "android_emulator_launch_result=${ANDROID_EMULATOR_LAUNCH_RESULT:-not_run}"
+            echo "android_emulator_package=${ANDROID_EMULATOR_PACKAGE:-com.wellnessmaker.pocketmemorypet}"
             echo "build_commands=flutter build apk --debug; flutter build appbundle --release"
             echo
             flutter --version

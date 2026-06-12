@@ -29,6 +29,7 @@ Requirements:
 - `store-screenshot-drafts-<run_number>` against `store_screenshot_manifest.json`.
 - `android-debug-apk-<run_number>` against `android-qa-manifest-<run_number>`.
 - `android-release-aab-<run_number>` against `android-qa-manifest-<run_number>`.
+- `android-emulator-smoke-<run_number>` reports `launch_result=passed`.
 - `ios-simulator-app-<run_number>` against `ios-qa-manifest-<run_number>`.
 - `ios-release-nocodesign-app-<run_number>` against `ios-qa-manifest-<run_number>`.
 - `ios-simulator-smoke-<run_number>` reports `launch_result=passed`.

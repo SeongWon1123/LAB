@@ -39,4 +39,6 @@ Run `python tool/verify_release_artifacts.py` first to create `release_artifact_
 
 ## CI Smoke Evidence
 
+The Native Build workflow installs and launches the Android debug APK on an emulator and uploads `android-emulator-smoke-<run_number>`. This proves the debug APK can install and keep a launched app process alive, but it does not replace the manual Android device matrix above.
+
 The Native Build workflow installs and launches the iOS simulator artifact in CI and uploads `ios-simulator-smoke-<run_number>`. This proves the simulator bundle can launch, but it does not replace the manual QA matrix above.

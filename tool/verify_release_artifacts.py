@@ -202,10 +202,39 @@ def verify_native_file(
 def verify_android(native_artifacts: dict[str, Path]) -> dict[str, Any]:
     manifest_path = find_unique(native_artifacts["android_manifest"], "android-manifest.txt")
     manifest = parse_key_value_file(manifest_path)
+    smoke_path = find_unique(native_artifacts["android_smoke"], "android-emulator-smoke.txt")
+    smoke = parse_key_value_file(smoke_path)
+    launch_result = manifest.get("android_emulator_launch_result") or smoke.get("launch_result")
+    if launch_result != "passed":
+        raise RuntimeError(f"Android emulator smoke launch did not pass: {launch_result}")
+
+    smoke_result: dict[str, Any] = {
+        "smoke_log": smoke_path.relative_to(native_artifacts["android_smoke"]).as_posix(),
+        "launch_result": launch_result,
+        "package_id": smoke.get("package_id") or manifest.get("android_emulator_package"),
+    }
+    try:
+        screenshot = find_unique(native_artifacts["android_smoke"], "android-emulator-smoke.png")
+    except FileNotFoundError:
+        screenshot = None
+    if screenshot is not None:
+        screenshot_size = screenshot.stat().st_size
+        screenshot_sha = sha256(screenshot)
+        if smoke.get("screenshot_size_bytes") and int(smoke["screenshot_size_bytes"]) != screenshot_size:
+            raise RuntimeError("Android smoke screenshot size does not match smoke log.")
+        if smoke.get("screenshot_sha256") and smoke["screenshot_sha256"] != screenshot_sha:
+            raise RuntimeError("Android smoke screenshot SHA-256 does not match smoke log.")
+        smoke_result["screenshot"] = {
+            "path": screenshot.relative_to(native_artifacts["android_smoke"]).as_posix(),
+            "size_bytes": screenshot_size,
+            "sha256": screenshot_sha,
+        }
+
     return {
         "manifest": manifest_path.relative_to(native_artifacts["android_manifest"]).as_posix(),
         "run_number": manifest.get("run_number"),
         "commit": manifest.get("commit"),
+        "emulator_smoke": smoke_result,
         "debug_apk": verify_native_file(
             manifest,
             native_artifacts["android_debug"],
@@ -272,6 +301,7 @@ def write_report(report: dict[str, Any], output_dir: Path) -> None:
         f"store_screenshots_verified={report['flutter_artifacts']['store_screenshots']['count']}",
         f"android_debug_apk_sha256={report['native_artifacts']['android']['debug_apk']['sha256']}",
         f"android_release_aab_sha256={report['native_artifacts']['android']['release_aab']['sha256']}",
+        f"android_emulator_launch_result={report['native_artifacts']['android']['emulator_smoke']['launch_result']}",
         f"ios_simulator_app_sha256={report['native_artifacts']['ios']['simulator_app']['sha256']}",
         f"ios_release_nocodesign_sha256={report['native_artifacts']['ios']['release_nocodesign_app']['sha256']}",
         f"ios_simulator_launch_result={report['native_artifacts']['ios']['simulator_launch_result']}",
@@ -306,6 +336,7 @@ def build_report(repo: str, branch: str, output_root: Path, limit: int) -> dict[
     native_artifacts = {
         "android_debug": download_artifact(repo, native_run["databaseId"], f"android-debug-apk-{native_number}", output_dir),
         "android_release": download_artifact(repo, native_run["databaseId"], f"android-release-aab-{native_number}", output_dir),
+        "android_smoke": download_artifact(repo, native_run["databaseId"], f"android-emulator-smoke-{native_number}", output_dir),
         "android_manifest": download_artifact(repo, native_run["databaseId"], f"android-qa-manifest-{native_number}", output_dir),
         "ios_simulator": download_artifact(repo, native_run["databaseId"], f"ios-simulator-app-{native_number}", output_dir),
         "ios_smoke": download_artifact(repo, native_run["databaseId"], f"ios-simulator-smoke-{native_number}", output_dir),
