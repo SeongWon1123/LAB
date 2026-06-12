@@ -106,8 +106,18 @@ def main() -> int:
         errors.append("Native workflow must upload Pocket-Memory-Pet-release-nocodesign.app.zip.")
     if "reactivecircus/android-emulator-runner@v2" not in workflow:
         errors.append("Native workflow must run Android emulator smoke evidence.")
+    if "script: bash tool/android_emulator_smoke.sh" not in workflow:
+        errors.append("Native workflow must call the Android smoke script as a single command.")
     if "android-emulator-smoke-${{ github.run_number }}" not in workflow:
         errors.append("Native workflow must upload android-emulator-smoke-<run_number>.")
+
+    android_smoke_script = read(Path("tool/android_emulator_smoke.sh"))
+    if "adb install -r" not in android_smoke_script:
+        errors.append("Android smoke script must install the debug APK on the emulator.")
+    if "adb shell monkey" not in android_smoke_script:
+        errors.append("Android smoke script must launch the app through the launcher intent.")
+    if 'launch_result="passed"' not in android_smoke_script:
+        errors.append("Android smoke script must record a passed launch result.")
 
     ci_workflow = read(Path(".github/workflows/ci.yml"))
     if "tool/generate_brand_assets.py --force" not in ci_workflow:
