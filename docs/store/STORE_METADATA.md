@@ -73,5 +73,6 @@ Do not use third-party brand names, product names, or trademark-adjacent phrases
 ## Required Before Submission
 
 - Verify the GitHub Pages deployment is live.
+- Download `brand-assets-<run_number>` and verify `play_icon_512.png`, `feature_graphic_1024x500.png`, `brand_asset_manifest.json`, and `brand_asset_manifest.txt`.
 - Final screenshots from real device or simulator builds.
 - Final app icon review in platform masks.

@@ -10,7 +10,9 @@
 - Prepare icon, feature graphic, screenshots, privacy policy URL, data safety, content rating, target age, and test access notes.
 - Use `docs/store/STORE_METADATA.md` for copy.
 - Use `docs/store/DATA_SAFETY_DRAFT.md` for the Data safety form.
+- Use `docs/store/BRAND_ASSET_PLAN.md` for icon and feature graphic requirements.
 - Use `docs/store/SCREENSHOT_CAPTURE_PLAN.md` before final screenshot capture.
+- Use `brand_asset_manifest.json` from the latest `brand-assets-<run_number>` artifact to verify `play_icon_512.png`, `feature_graphic_1024x500.png`, source asset sizes, and SHA-256 checksums.
 - Use `store_screenshot_manifest.json` from the latest `store-screenshot-drafts-<run_number>` artifact to verify draft screenshot file names, sizes, and SHA-256 checksums.
 
 ## iOS
@@ -41,6 +43,7 @@ Use the latest successful Native Build workflow artifacts for installable QA bui
 
 - `android-debug-apk-<run_number>` for Android device smoke testing.
 - `android-release-aab-<run_number>` for Play Console upload rehearsal.
+- `brand-assets-<run_number>` for Play icon, feature graphic, source brand art, and `brand_asset_manifest.txt`.
 - `ios-simulator-app-<run_number>` for iOS simulator smoke testing.
 - `ios-simulator-smoke-<run_number>` for CI install/launch smoke evidence.
 - `ios-release-nocodesign-app-<run_number>` for signing-independent iOS release build verification.

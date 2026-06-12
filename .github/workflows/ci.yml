@@ -28,6 +28,27 @@ jobs:
       - name: Validate static site
         run: python3 tool/validate_static_site.py
 
+      - name: Generate brand assets
+        run: python3 tool/generate_brand_assets.py --force
+
+      - name: Validate brand assets
+        run: python3 tool/validate_brand_assets.py
+
+      - name: Generate brand asset manifest
+        run: python3 tool/generate_brand_asset_manifest.py
+
+      - name: Upload brand assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: brand-assets-${{ github.run_number }}
+          path: |
+            assets/images/brand/*.png
+            store_assets/brand/*.png
+            build/brand_assets/brand_asset_manifest.json
+            build/brand_assets/brand_asset_manifest.txt
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Analyze
         run: flutter analyze
 

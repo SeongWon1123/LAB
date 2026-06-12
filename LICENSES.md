@@ -4,10 +4,12 @@
 
 All current visual elements are code-drawn placeholders or generated brand assets created for this project. No third-party brand assets, product photos, logos, or character art are included.
 
-## Brand Images
+## Brand And Store Images
 
 - `assets/images/brand/app_icon_1024.png`
 - `assets/images/brand/splash_1024.png`
+- `store_assets/brand/play_icon_512.png`
+- `store_assets/brand/feature_graphic_1024x500.png`
 
 These PNG files were procedurally generated for Pocket Memory Pet in this repository. They do not include third-party icons, logos, character art, or photos.
 

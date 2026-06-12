@@ -12,7 +12,7 @@ Pocket Memory Pet is an original, local-first retro pixel pet app for iOS and An
 - Meal, snack, play, clean, sleep, and wake care actions
 - Jump Star Flame mini-game with pet-care rewards
 - Original short beep effects and haptic feedback
-- Generated original app icon and splash source assets
+- Generated original app icon, splash, Play icon, and feature graphic assets
 - UTC-based elapsed-time simulation capped at 48 offline hours
 - Growth stages and automatic diary entries
 - Hive CE local persistence through repository interfaces
@@ -63,7 +63,7 @@ The repository also includes a native build workflow that generates Android/iOS 
 - iOS release build without code signing
 - Android/iOS QA manifest artifacts
 
-The Flutter CI workflow verifies `flutter analyze`, `flutter test`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`. That artifact also includes `store_screenshot_manifest.json` and `store_screenshot_manifest.txt` with file sizes and SHA-256 checksums.
+The Flutter CI workflow verifies `flutter analyze`, `flutter test`, CI-generated brand assets uploaded as `brand-assets-<run_number>`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`. The brand artifact includes `brand_asset_manifest.json` and `brand_asset_manifest.txt` for `play_icon_512.png`, `feature_graphic_1024x500.png`, and native source art. The screenshot artifact includes `store_screenshot_manifest.json` and `store_screenshot_manifest.txt` with file sizes and SHA-256 checksums.
 
 For iOS:
 

@@ -10,11 +10,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 RELEASE_DOCS = [
     Path("README.md"),
+    Path("docs/ASSET_GUIDE.md"),
     Path("docs/STORE_RELEASE_CHECKLIST.md"),
     Path("docs/TEST_PLAN.md"),
     Path("docs/PRIVACY_POLICY_DRAFT.md"),
     Path("docs/qa/MANUAL_QA_LOG.md"),
     Path("docs/store/APP_PRIVACY_DRAFT.md"),
+    Path("docs/store/BRAND_ASSET_PLAN.md"),
     Path("docs/store/DATA_SAFETY_DRAFT.md"),
     Path("docs/store/SCREENSHOT_CAPTURE_PLAN.md"),
     Path("docs/store/STORE_METADATA.md"),
@@ -37,6 +39,11 @@ REQUIRED_RELEASE_REFERENCES = [
     "ios-simulator-smoke-<run_number>",
     "ios-release-nocodesign-app-<run_number>",
     "ios-qa-manifest-<run_number>",
+    "brand-assets-<run_number>",
+    "brand_asset_manifest.json",
+    "brand_asset_manifest.txt",
+    "play_icon_512.png",
+    "feature_graphic_1024x500.png",
     "store-screenshot-drafts-<run_number>",
     "store_screenshot_manifest.json",
     "store_screenshot_manifest.txt",
@@ -92,6 +99,20 @@ def main() -> int:
         errors.append("Native workflow must upload Pocket-Memory-Pet-simulator.app.zip.")
     if "Pocket-Memory-Pet-release-nocodesign.app.zip" not in workflow:
         errors.append("Native workflow must upload Pocket-Memory-Pet-release-nocodesign.app.zip.")
+
+    ci_workflow = read(Path(".github/workflows/ci.yml"))
+    if "tool/generate_brand_assets.py --force" not in ci_workflow:
+        errors.append("Flutter CI must regenerate brand assets before validation.")
+    if "tool/validate_brand_assets.py" not in ci_workflow:
+        errors.append("Flutter CI must validate brand assets.")
+    if "tool/generate_brand_asset_manifest.py" not in ci_workflow:
+        errors.append("Flutter CI must generate the brand asset manifest.")
+    if "brand-assets-${{ github.run_number }}" not in ci_workflow:
+        errors.append("Flutter CI must upload brand-assets-<run_number>.")
+
+    pubspec = read(Path("pubspec.yaml"))
+    if "store_assets/" in pubspec:
+        errors.append("Store-only assets must not be bundled through pubspec.yaml.")
 
     pages_workflow = read(Path(".github/workflows/pages.yml"))
     if "actions/deploy-pages@v5" not in pages_workflow:
