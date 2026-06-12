@@ -28,6 +28,12 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
   }
 
   @override
+  void dispose() {
+    _game.pauseEngine();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final result = _result;
 

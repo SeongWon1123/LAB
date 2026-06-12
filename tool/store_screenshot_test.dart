@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:pocket_memory_pet/core/theme/app_theme.dart';
 import 'package:pocket_memory_pet/features/diary/presentation/diary_screen.dart';
 import 'package:pocket_memory_pet/features/hatch/presentation/hatch_screen.dart';
 import 'package:pocket_memory_pet/features/home/presentation/home_screen.dart';
+import 'package:pocket_memory_pet/features/minigame/presentation/jump_star_game.dart';
 import 'package:pocket_memory_pet/features/minigame/presentation/play_screen.dart';
 import 'package:pocket_memory_pet/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
@@ -22,71 +24,71 @@ import 'package:pocket_memory_pet/features/status/presentation/status_screen.dar
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('generates draft store screenshots', (tester) async {
-    final sizes = <_ScreenshotSize>[
-      const _ScreenshotSize(
-        name: 'android_phone',
-        logicalSize: Size(360, 800),
-        pixelRatio: 3,
-      ),
-      const _ScreenshotSize(
-        name: 'ios_6_7',
-        logicalSize: Size(430, 932),
-        pixelRatio: 3,
-      ),
-    ];
+  final sizes = <_ScreenshotSize>[
+    const _ScreenshotSize(
+      name: 'android_phone',
+      logicalSize: Size(360, 800),
+    ),
+    const _ScreenshotSize(
+      name: 'ios_6_7',
+      logicalSize: Size(430, 932),
+    ),
+  ];
 
-    final captures = <_ScreenCapture>[
-      _ScreenCapture(
-        name: '01_onboarding',
-        builder: (_) => const OnboardingScreen(),
-        sessionBuilder: _onboardingSession,
-      ),
-      _ScreenCapture(
-        name: '02_hatch',
-        builder: (_) => const HatchScreen(),
-        sessionBuilder: _hatchSession,
-      ),
-      _ScreenCapture(
-        name: '03_home',
-        builder: (_) => const HomeScreen(),
-        sessionBuilder: _sampleSession,
-      ),
-      _ScreenCapture(
-        name: '04_status',
-        builder: (_) => const StatusScreen(),
-        sessionBuilder: _sampleSession,
-      ),
-      _ScreenCapture(
-        name: '05_jump_star',
-        builder: (_) => const PlayScreen(),
-        sessionBuilder: _sampleSession,
-        settle: const Duration(milliseconds: 500),
-      ),
-      _ScreenCapture(
-        name: '06_diary',
-        builder: (_) => const DiaryScreen(),
-        sessionBuilder: _sampleSession,
-      ),
-      _ScreenCapture(
-        name: '07_settings',
-        builder: (_) => const SettingsScreen(),
-        sessionBuilder: _sampleSession,
-      ),
-    ];
+  final captures = <_ScreenCapture>[
+    _ScreenCapture(
+      name: '01_onboarding',
+      builder: (_) => const OnboardingScreen(),
+      sessionBuilder: _onboardingSession,
+    ),
+    _ScreenCapture(
+      name: '02_hatch',
+      builder: (_) => const HatchScreen(),
+      sessionBuilder: _hatchSession,
+    ),
+    _ScreenCapture(
+      name: '03_home',
+      builder: (_) => const HomeScreen(),
+      sessionBuilder: _sampleSession,
+    ),
+    _ScreenCapture(
+      name: '04_status',
+      builder: (_) => const StatusScreen(),
+      sessionBuilder: _sampleSession,
+    ),
+    _ScreenCapture(
+      name: '05_jump_star',
+      builder: (_) => const PlayScreen(),
+      sessionBuilder: _sampleSession,
+      settle: const Duration(milliseconds: 500),
+      beforeCapture: _pauseJumpStar,
+    ),
+    _ScreenCapture(
+      name: '06_diary',
+      builder: (_) => const DiaryScreen(),
+      sessionBuilder: _sampleSession,
+    ),
+    _ScreenCapture(
+      name: '07_settings',
+      builder: (_) => const SettingsScreen(),
+      sessionBuilder: _sampleSession,
+    ),
+  ];
 
-    for (final size in sizes) {
-      tester.view.devicePixelRatio = size.pixelRatio;
-      tester.view.physicalSize = size.logicalSize * size.pixelRatio;
+  for (final size in sizes) {
+    for (final capture in captures) {
+      testWidgets('generates ${size.name}/${capture.name}', (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = size.logicalSize;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      for (final capture in captures) {
         await _captureScreen(tester, size, capture);
-      }
+      });
     }
-
-    tester.view.resetPhysicalSize();
-    tester.view.resetDevicePixelRatio();
-  });
+  }
 }
 
 Future<void> _captureScreen(
@@ -115,10 +117,12 @@ Future<void> _captureScreen(
   );
   await tester.pump();
   await tester.pump(capture.settle);
+  await capture.beforeCapture?.call(tester);
 
   final boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-  final image = await boundary.toImage(pixelRatio: size.pixelRatio);
+  final image = await boundary.toImage();
   final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  image.dispose();
   final bytes = byteData!.buffer.asUint8List();
 
   final output = File('build/store_screenshots/${size.name}/${capture.name}.png');
@@ -126,6 +130,15 @@ Future<void> _captureScreen(
   output.writeAsBytesSync(bytes);
 
   await tester.pumpWidget(const SizedBox.shrink());
+  await tester.pump();
+}
+
+Future<void> _pauseJumpStar(WidgetTester tester) async {
+  final finder = find.byWidgetPredicate(
+    (widget) => widget is GameWidget<JumpStarGame>,
+  );
+  final widget = tester.widget<GameWidget<JumpStarGame>>(finder);
+  widget.game?.pauseEngine();
   await tester.pump();
 }
 
@@ -199,22 +212,22 @@ class _ScreenCapture {
     required this.builder,
     required this.sessionBuilder,
     this.settle = const Duration(milliseconds: 100),
+    this.beforeCapture,
   });
 
   final String name;
   final Widget Function(PetSession session) builder;
   final PetSession Function(DateTime nowUtc) sessionBuilder;
   final Duration settle;
+  final Future<void> Function(WidgetTester tester)? beforeCapture;
 }
 
 class _ScreenshotSize {
   const _ScreenshotSize({
     required this.name,
     required this.logicalSize,
-    required this.pixelRatio,
   });
 
   final String name;
   final Size logicalSize;
-  final double pixelRatio;
 }
