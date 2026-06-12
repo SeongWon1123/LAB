@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RELEASE_DOCS = [
     Path("README.md"),
     Path("docs/ASSET_GUIDE.md"),
+    Path("docs/RELEASE_ARTIFACT_VERIFICATION.md"),
     Path("docs/STORE_RELEASE_CHECKLIST.md"),
     Path("docs/TEST_PLAN.md"),
     Path("docs/PRIVACY_POLICY_DRAFT.md"),
@@ -44,6 +45,9 @@ REQUIRED_RELEASE_REFERENCES = [
     "brand_asset_manifest.txt",
     "play_icon_512.png",
     "feature_graphic_1024x500.png",
+    "release-evidence-<run_number>",
+    "release_artifact_report.json",
+    "release_artifact_report.txt",
     "store-screenshot-drafts-<run_number>",
     "store_screenshot_manifest.json",
     "store_screenshot_manifest.txt",
@@ -109,6 +113,14 @@ def main() -> int:
         errors.append("Flutter CI must generate the brand asset manifest.")
     if "brand-assets-${{ github.run_number }}" not in ci_workflow:
         errors.append("Flutter CI must upload brand-assets-<run_number>.")
+
+    release_evidence_workflow = read(Path(".github/workflows/release-evidence.yml"))
+    if "workflow_dispatch" not in release_evidence_workflow:
+        errors.append("Release Evidence workflow must be manually dispatchable.")
+    if "tool/verify_release_artifacts.py" not in release_evidence_workflow:
+        errors.append("Release Evidence workflow must verify release artifacts.")
+    if "release-evidence-${{ github.run_number }}" not in release_evidence_workflow:
+        errors.append("Release Evidence workflow must upload release-evidence-<run_number>.")
 
     pubspec = read(Path("pubspec.yaml"))
     if "store_assets/" in pubspec:

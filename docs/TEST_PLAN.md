@@ -28,6 +28,7 @@
 ## Manual QA
 
 Use `docs/qa/MANUAL_QA_LOG.md` as the release QA record.
+Run `python tool/verify_release_artifacts.py` first to create `release_artifact_report.json` and `release_artifact_report.txt` under `build/release_artifacts/`; copy the relevant run numbers and SHA-256 values into the QA log.
 
 - Android 360x800 class: install `android-debug-apk-<run_number>` and capture all overflow-sensitive screens.
 - Android large screen: install `android-debug-apk-<run_number>` and verify layout density, touch targets, and persistence.

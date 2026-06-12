@@ -65,6 +65,8 @@ The repository also includes a native build workflow that generates Android/iOS 
 
 The Flutter CI workflow verifies `flutter analyze`, `flutter test`, CI-generated brand assets uploaded as `brand-assets-<run_number>`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`. The brand artifact includes `brand_asset_manifest.json` and `brand_asset_manifest.txt` for `play_icon_512.png`, `feature_graphic_1024x500.png`, and native source art. The screenshot artifact includes `store_screenshot_manifest.json` and `store_screenshot_manifest.txt` with file sizes and SHA-256 checksums.
 
+Before manual QA, run the `Release Evidence` workflow or run `python tool/verify_release_artifacts.py` from an authenticated GitHub CLI session. It downloads the latest successful Flutter CI and Native Build artifacts for the current commit, verifies manifest SHA-256 values, and writes `release_artifact_report.json` plus `release_artifact_report.txt` under `build/release_artifacts/`. The workflow uploads these reports as `release-evidence-<run_number>`.
+
 For iOS:
 
 ```bash

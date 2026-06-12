@@ -39,8 +39,10 @@ Use only original app positioning and the legal disclaimer from README.
 ## Manual QA
 
 Record release QA in `docs/qa/MANUAL_QA_LOG.md`.
+Run the `Release Evidence` workflow or `python tool/verify_release_artifacts.py` before manual QA to download the latest successful Flutter CI and Native Build artifacts for the current commit and verify `release_artifact_report.json` plus `release_artifact_report.txt`.
 Use the latest successful Native Build workflow artifacts for installable QA builds:
 
+- `release-evidence-<run_number>` for the pre-QA artifact verification report.
 - `android-debug-apk-<run_number>` for Android device smoke testing.
 - `android-release-aab-<run_number>` for Play Console upload rehearsal.
 - `brand-assets-<run_number>` for Play icon, feature graphic, source brand art, and `brand_asset_manifest.txt`.

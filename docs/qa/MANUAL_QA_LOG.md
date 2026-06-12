@@ -13,9 +13,19 @@ Manual QA must be run on real devices or simulators before store submission. Do 
 - iOS simulator smoke artifact: `ios-simulator-smoke-<run_number>`
 - iOS no-codesign release artifact: `ios-release-nocodesign-app-<run_number>`
 - Brand asset artifact: `brand-assets-<run_number>`
+- Release evidence artifact: `release-evidence-<run_number>`
 - QA manifest artifacts: `android-qa-manifest-<run_number>`, `ios-qa-manifest-<run_number>`
+- Release artifact verification report: `release_artifact_report.txt`
 
 Use the latest successful Native Build workflow run for installable artifacts and the latest successful Flutter CI workflow run for `brand-assets-<run_number>`. Paste the native manifest values plus `brand_asset_manifest.json` or `brand_asset_manifest.txt` values, file sizes, and SHA-256 checksums into this section before QA starts. The iOS simulator app artifact is for simulator QA only, the smoke artifact proves CI install/launch only, and the no-codesign release artifact is a build gate only; TestFlight still requires a signed archive from an Apple Developer account.
+
+Preferred pre-QA command:
+
+```bash
+python tool/verify_release_artifacts.py
+```
+
+This writes `release_artifact_report.json` and `release_artifact_report.txt` under `build/release_artifacts/` and verifies the downloaded artifact checksums before manual testing starts. The same check can be run from GitHub Actions with the `Release Evidence` workflow, which uploads `release-evidence-<run_number>`.
 
 ## Install Commands
 
