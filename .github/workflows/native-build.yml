@@ -103,8 +103,16 @@ jobs:
 
       - name: Package iOS simulator app
         run: |
-          cd build/ios/iphonesimulator
-          ditto -c -k --keepParent Runner.app Runner-simulator.app.zip
+          app_path="$(find build/ios/iphonesimulator -maxdepth 1 -type d -name '*.app' | head -n 1)"
+          if [ -z "$app_path" ]; then
+            echo "No iOS simulator .app bundle found."
+            find build/ios -maxdepth 3 -type d -name '*.app' -print
+            exit 1
+          fi
+          echo "Packaging iOS simulator app: $app_path"
+          app_dir="$(dirname "$app_path")"
+          app_name="$(basename "$app_path")"
+          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Runner-simulator.app.zip)
 
       - name: Upload iOS simulator app
         if: always()
@@ -120,8 +128,16 @@ jobs:
 
       - name: Package iOS release app
         run: |
-          cd build/ios/iphoneos
-          ditto -c -k --keepParent Runner.app Runner-release-nocodesign.app.zip
+          app_path="$(find build/ios/iphoneos -maxdepth 1 -type d -name '*.app' | head -n 1)"
+          if [ -z "$app_path" ]; then
+            echo "No iOS release .app bundle found."
+            find build/ios -maxdepth 3 -type d -name '*.app' -print
+            exit 1
+          fi
+          echo "Packaging iOS release app: $app_path"
+          app_dir="$(dirname "$app_path")"
+          app_name="$(basename "$app_path")"
+          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Runner-release-nocodesign.app.zip)
 
       - name: Upload iOS release no-codesign app
         if: always()
