@@ -26,6 +26,7 @@ class NotificationPolicy {
 
   static const reminderNotificationBaseId = 2000;
   static const maxDailyNotifications = 3;
+  static const reminderCancellationDays = 7;
   static const quietStartHour = 22;
   static const quietEndHour = 8;
   static const reminderHours = [9, 14, 19];
@@ -130,7 +131,7 @@ class NotificationService {
       await initialize();
     }
 
-    await cancelAll();
+    await cancelCareReminders();
     final plan = policy.buildReminderPlan(
       localNow: localNow ?? DateTime.now(),
       messages: reminderMessages(),
@@ -159,6 +160,18 @@ class NotificationService {
     }
 
     return plan;
+  }
+
+  Future<void> cancelCareReminders() async {
+    if (!_initialized) {
+      await initialize();
+    }
+
+    final count = NotificationPolicy.reminderCancellationDays *
+        NotificationPolicy.maxDailyNotifications;
+    for (var offset = 0; offset < count; offset += 1) {
+      await _plugin.cancel(NotificationPolicy.reminderNotificationBaseId + offset);
+    }
   }
 
   Future<void> cancelAll() async {

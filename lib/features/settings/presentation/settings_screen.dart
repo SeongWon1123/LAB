@@ -52,7 +52,7 @@ class SettingsScreen extends ConsumerWidget {
     required bool enabled,
   }) async {
     if (!enabled) {
-      await ref.read(notificationServiceProvider).cancelAll();
+      await ref.read(notificationServiceProvider).cancelCareReminders();
       controller.setNotificationsEnabled(enabled: false);
       return;
     }

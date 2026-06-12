@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pocket_memory_pet/core/notifications/notification_service.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
 import 'package:pocket_memory_pet/features/pet/data/in_memory_pet_repository.dart';
 import 'package:pocket_memory_pet/features/pet/domain/pet_session.dart';
@@ -77,5 +78,5 @@ class _FakeNotificationService extends NotificationService {
   }
 
   @override
-  Future<void> cancelAll() async {}
+  Future<void> cancelCareReminders() async {}
 }

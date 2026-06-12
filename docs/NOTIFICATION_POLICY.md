@@ -18,7 +18,7 @@ Show an explanation before requesting permission. If the user declines, the app 
 
 ## Scheduling
 
-When reminders are enabled, the app cancels existing local reminders and schedules the next two days of care reminders. Past candidate times for the current day are skipped. If the user turns reminders off, all local reminders are cancelled.
+When reminders are enabled, the app cancels existing care reminder IDs and schedules the next two days of care reminders. Past candidate times for the current day are skipped. If the user turns reminders off, care reminder IDs are cancelled without clearing unrelated local notifications.
 
 ## Message Drafts
 
