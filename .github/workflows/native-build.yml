@@ -174,7 +174,7 @@ jobs:
         run: |
           set -euo pipefail
           bundle_id="com.wellnessmaker.pocketmemorypet"
-          app_path="${IOS_SIMULATOR_APP_PATH:?missing IOS_SIMULATOR_APP_PATH}"
+          app_path="$IOS_SIMULATOR_APP_PATH"
           smoke_log="build/qa/ios-simulator-smoke.txt"
           mkdir -p build/qa
 
@@ -194,18 +194,18 @@ jobs:
               echo "commit=${{ github.sha }}"
               echo "branch=${{ github.ref_name }}"
               echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-              echo "simulator_device=${device_name:-unknown}"
-              echo "simulator_udid=${device_id:-unknown}"
-              echo "app_bundle=${IOS_SIMULATOR_APP_BUNDLE:-unknown}"
+              echo "simulator_device=$device_name"
+              echo "simulator_udid=$device_id"
+              echo "app_bundle=$IOS_SIMULATOR_APP_BUNDLE"
               echo "bundle_id=$bundle_id"
               echo "actual_bundle_id=$actual_bundle_id"
               echo "launch_result=$launch_result"
               echo "launch_output=$(printf '%s' "$launch_output" | tr '\n' ' ')"
             } > "$smoke_log"
             echo "IOS_SIMULATOR_LAUNCH_RESULT=$launch_result" >> "$GITHUB_ENV"
-            echo "IOS_SIMULATOR_LAUNCH_DEVICE=${device_name:-unknown}" >> "$GITHUB_ENV"
-            echo "IOS_SIMULATOR_LAUNCH_UDID=${device_id:-unknown}" >> "$GITHUB_ENV"
-            if [ -n "${device_id:-}" ]; then
+            echo "IOS_SIMULATOR_LAUNCH_DEVICE=$device_name" >> "$GITHUB_ENV"
+            echo "IOS_SIMULATOR_LAUNCH_UDID=$device_id" >> "$GITHUB_ENV"
+            if [ -n "$device_id" ]; then
               xcrun simctl terminate "$device_id" "$bundle_id" || true
               xcrun simctl shutdown "$device_id" || true
             fi
@@ -226,32 +226,32 @@ jobs:
 
           xcrun simctl list --json devices available > build/qa/simctl-devices.json
           device_info="$(python3 - <<'PY'
-import json
-from pathlib import Path
+          import json
+          from pathlib import Path
 
-data = json.loads(Path("build/qa/simctl-devices.json").read_text(encoding="utf-8"))
-preferred: list[tuple[str, str, str]] = []
-fallback: list[tuple[str, str, str]] = []
-for runtime, devices in data.get("devices", {}).items():
-    if "iOS" not in runtime:
-        continue
-    for device in devices:
-        name = device.get("name", "")
-        udid = device.get("udid", "")
-        state = device.get("state", "")
-        device_type = device.get("deviceTypeIdentifier", "")
-        if not (device.get("isAvailable") and udid and ("iPhone" in device_type or name.startswith("iPhone"))):
-            continue
-        record = (udid, name, state)
-        if state == "Shutdown":
-            preferred.append(record)
-        else:
-            fallback.append(record)
-devices = preferred or fallback
-if devices:
-    print("\t".join(devices[0]))
-PY
-)"
+          data = json.loads(Path("build/qa/simctl-devices.json").read_text(encoding="utf-8"))
+          preferred: list[tuple[str, str, str]] = []
+          fallback: list[tuple[str, str, str]] = []
+          for runtime, devices in data.get("devices", {}).items():
+              if "iOS" not in runtime:
+                  continue
+              for device in devices:
+                  name = device.get("name", "")
+                  udid = device.get("udid", "")
+                  state = device.get("state", "")
+                  device_type = device.get("deviceTypeIdentifier", "")
+                  if not (device.get("isAvailable") and udid and ("iPhone" in device_type or name.startswith("iPhone"))):
+                      continue
+                  record = (udid, name, state)
+                  if state == "Shutdown":
+                      preferred.append(record)
+                  else:
+                      fallback.append(record)
+          devices = preferred or fallback
+          if devices:
+              print("\t".join(devices[0]))
+          PY
+          )"
           if [ -z "$device_info" ]; then
             echo "No available iPhone simulator found."
             xcrun simctl list devices available
