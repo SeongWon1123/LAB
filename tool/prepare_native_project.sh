@@ -20,7 +20,7 @@ path = Path(sys.argv[1])
 pattern = sys.argv[2]
 replacement = sys.argv[3]
 text = path.read_text(encoding="utf-8")
-next_text = re.sub(pattern, replacement, text)
+next_text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
 if next_text != text:
     path.write_text(next_text, encoding="utf-8")
 PY

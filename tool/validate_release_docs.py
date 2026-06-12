@@ -119,6 +119,12 @@ def main() -> int:
     if 'launch_result="passed"' not in android_smoke_script:
         errors.append("Android smoke script must record a passed launch result.")
 
+    native_project_script = read(Path("tool/prepare_native_project.sh"))
+    if "flags=re.MULTILINE" not in native_project_script:
+        errors.append("Native project generation must patch Android package declarations line-by-line.")
+    if 'APP_ID="com.wellnessmaker.pocketmemorypet"' not in native_project_script:
+        errors.append("Native project generation must use the package id without underscores.")
+
     ci_workflow = read(Path(".github/workflows/ci.yml"))
     if "tool/generate_brand_assets.py --force" not in ci_workflow:
         errors.append("Flutter CI must regenerate brand assets before validation.")
