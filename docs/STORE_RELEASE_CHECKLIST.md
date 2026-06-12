@@ -8,6 +8,9 @@
 - Build release AAB for store submission.
 - Run `bash tool/prepare_native_project.sh` before native builds if platform folders have not been generated locally.
 - Prepare icon, feature graphic, screenshots, privacy policy URL, data safety, content rating, target age, and test access notes.
+- Use `docs/store/STORE_METADATA.md` for copy.
+- Use `docs/store/DATA_SAFETY_DRAFT.md` for the Data safety form.
+- Use `docs/store/SCREENSHOT_CAPTURE_PLAN.md` before final screenshot capture.
 
 ## iOS
 
@@ -18,7 +21,13 @@
 - App Privacy answers.
 - TestFlight archive.
 - App Store screenshots and review notes.
+- Use `docs/store/APP_PRIVACY_DRAFT.md` for App Privacy answers.
+- Use `docs/store/TESTFLIGHT_PREP.md` for external signing and upload steps.
 
 ## Store Copy
 
 Use only original app positioning and the legal disclaimer from README.
+
+## Manual QA
+
+Record release QA in `docs/qa/MANUAL_QA_LOG.md`.

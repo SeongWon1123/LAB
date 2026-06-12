@@ -103,3 +103,5 @@ if plist_path.exists():
     with plist_path.open("wb") as fh:
         plistlib.dump(data, fh)
 PY
+
+"$PYTHON_BIN" tool/generate_brand_assets.py --native

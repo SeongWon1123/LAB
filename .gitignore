@@ -19,5 +19,6 @@ ios/.symlinks/
 ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
 .tooling/
+__pycache__/
 Thumbs.db
 .DS_Store

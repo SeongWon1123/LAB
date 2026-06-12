@@ -32,6 +32,7 @@ flutter:
     - assets/sprites/icons/
     - assets/sprites/effects/
     - assets/sounds/
+    - assets/images/brand/
     - assets/images/backgrounds/
     - assets/images/shells/
     - assets/images/rooms/

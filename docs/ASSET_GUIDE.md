@@ -2,7 +2,7 @@
 
 ## Current State
 
-The MVP currently uses code-drawn placeholder visuals and original generated WAV effects.
+The MVP currently uses code-drawn placeholder visuals, original generated WAV effects, and original generated brand source PNGs.
 
 ## Rules
 
@@ -15,6 +15,4 @@ The MVP currently uses code-drawn placeholder visuals and original generated WAV
 
 - Pixel pet sprites for growth stages.
 - Tiny status icons.
-- App icon.
-- Splash placeholder.
 - Store screenshots.

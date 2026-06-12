@@ -10,7 +10,7 @@ Feature-first Flutter app with small domain objects, repository interfaces, loca
 - `data`: Hive and in-memory repository implementations.
 - `application`: elapsed-time simulation, care actions, Riverpod controller.
 - `presentation`: Flutter screens and widgets.
-- `core`: routing, theme, notifications, storage, audio placeholders.
+- `core`: routing, theme, notifications, storage, and audio services.
 - `shared`: reusable pixel, layout, and button widgets.
 
 ## Persistence

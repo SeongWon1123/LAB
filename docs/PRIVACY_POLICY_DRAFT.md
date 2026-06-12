@@ -26,4 +26,7 @@ The app may ask for notification permission to show local reminders. Denying per
 
 ## Contact
 
-Support contact and hosted privacy policy URL must be added before store submission.
+- Support contact: TODO before submission.
+- Hosted privacy policy URL: TODO before submission.
+
+This draft can be hosted as the store privacy policy after the support contact and URL are finalized.

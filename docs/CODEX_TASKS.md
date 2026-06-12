@@ -29,8 +29,7 @@
 
 ## Remaining
 
-- Add app icon and splash assets.
-- Prepare store screenshots and metadata.
+- Capture final store screenshots.
 - Prepare TestFlight upload on an Apple Developer account.
 - Run manual device QA.
 
@@ -50,3 +49,6 @@
 - [x] Add local reminder scheduling policy and settings integration.
 - [x] Replace Jump Star placeholder with a playable Flame mini-game.
 - [x] Add original short sound effects and haptics.
+- [x] Add generated app icon and splash source assets.
+- [x] Add store metadata and privacy form drafts.
+- [x] Add screenshot, TestFlight, and manual QA preparation docs.
