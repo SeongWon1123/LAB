@@ -84,7 +84,12 @@ class SettingsScreen extends ConsumerWidget {
       return;
     }
 
-    final granted = await ref.read(notificationServiceProvider).requestPermission();
+    final notificationService = ref.read(notificationServiceProvider);
+    final granted = await notificationService.requestPermission();
+    if (granted) {
+      await notificationService.scheduleCareReminders();
+    }
+
     controller.setNotificationsEnabled(enabled: granted);
 
     if (!context.mounted || granted) {

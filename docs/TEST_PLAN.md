@@ -10,6 +10,9 @@
 - Care mistakes.
 - Diary generation.
 - In-memory repository persistence.
+- Hive repository save, load, and reset.
+- Jump Star win/loss rules.
+- Notification quiet hours and reminder planning.
 
 ## Widget Tests
 
@@ -18,6 +21,9 @@
 - Center action button triggers care action.
 - Status gauges are visible.
 - Diary list is visible.
+- Onboarding blocks empty pet names.
+- Settings shows notification explanation before permission.
+- Settings schedules reminders after permission is granted.
 
 ## Manual QA
 

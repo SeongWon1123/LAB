@@ -14,6 +14,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final TextEditingController _nameController = TextEditingController();
+  String? _nameError;
 
   @override
   void dispose() {
@@ -65,12 +66,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       const SizedBox(height: 24),
                       TextField(
                         controller: _nameController,
+                        maxLength: 18,
                         textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Pet name',
                           hintText: 'Cloudy',
                           filled: true,
+                          errorText: _nameError,
                         ),
+                        onChanged: (_) {
+                          if (_nameError != null) {
+                            setState(() => _nameError = null);
+                          }
+                        },
                         onSubmitted: (_) => _continue(),
                       ),
                       const SizedBox(height: 18),
@@ -90,7 +98,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _continue() {
-    ref.read(petControllerProvider.notifier).namePet(_nameController.text);
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      setState(() => _nameError = 'Choose a pet name first.');
+      return;
+    }
+
+    ref.read(petControllerProvider.notifier).namePet(name);
     context.go('/hatch');
   }
 }

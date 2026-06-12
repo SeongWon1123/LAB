@@ -31,3 +31,11 @@
 - Play: improves happiness and mini-game wins, lowers energy.
 - Sleep: starts recovery.
 - Wake: returns to active care.
+
+## Jump Star Mini-Game
+
+- Target score: 3 stars.
+- Jump limit: 8 jumps.
+- Timer: 20 seconds.
+- Win reward: `happiness +20`, `discipline +2`, `energy -8`, and `totalMiniGameWins +1`.
+- Loss reward: `happiness +8`, `discipline +2`, and `energy -8`.

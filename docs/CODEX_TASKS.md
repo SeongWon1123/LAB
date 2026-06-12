@@ -32,7 +32,7 @@
 - Run Flutter SDK validation on a machine with Flutter installed.
 - Generate native Android/iOS folders with `flutter create --platforms=android,ios .` if needed.
 - Add app icon and splash assets.
-- Expand Flame mini-game.
+- Add original sound effects and haptics.
 - Run manual device QA.
 
 ## Native Build Verification
@@ -47,3 +47,6 @@
 - [x] Refresh elapsed time when the app resumes.
 - [x] Add Hive repository save/load/reset integration test.
 - [x] Add notification pre-permission explanation flow.
+- [x] Add onboarding validation for empty pet names.
+- [x] Add local reminder scheduling policy and settings integration.
+- [x] Replace Jump Star placeholder with a playable Flame mini-game.
