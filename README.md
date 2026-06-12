@@ -60,13 +60,20 @@ The repository also includes a native build workflow that generates Android/iOS 
 - Android debug APK
 - Android release AAB
 - iOS simulator build
+- iOS release build without code signing
+- Android/iOS QA manifest artifacts
+
+The Flutter CI workflow verifies `flutter analyze`, `flutter test`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`.
 
 For iOS:
 
 ```bash
 flutter run -d ios
-flutter build ios --simulator
+flutter build ios --simulator --no-codesign
+flutter build ios --release --no-codesign
 ```
+
+The no-codesign iOS release build is a signing-independent gate only. TestFlight still requires Apple Developer Program signing and App Store Connect upload.
 
 ## Package IDs
 

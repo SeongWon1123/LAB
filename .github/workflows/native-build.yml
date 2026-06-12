@@ -112,14 +112,20 @@ jobs:
           echo "Packaging iOS simulator app: $app_path"
           app_dir="$(dirname "$app_path")"
           app_name="$(basename "$app_path")"
-          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Runner-simulator.app.zip)
+          if [ "$app_name" != "Pocket Memory Pet.app" ]; then
+            echo "Unexpected iOS simulator app bundle: $app_name"
+            exit 1
+          fi
+          echo "IOS_SIMULATOR_APP_BUNDLE=$app_name" >> "$GITHUB_ENV"
+          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Pocket-Memory-Pet-simulator.app.zip)
+          unzip -l build/ios/iphonesimulator/Pocket-Memory-Pet-simulator.app.zip | head -n 20
 
       - name: Upload iOS simulator app
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ios-simulator-app-${{ github.run_number }}
-          path: build/ios/iphonesimulator/Runner-simulator.app.zip
+          path: build/ios/iphonesimulator/Pocket-Memory-Pet-simulator.app.zip
           if-no-files-found: error
           retention-days: 14
 
@@ -137,14 +143,20 @@ jobs:
           echo "Packaging iOS release app: $app_path"
           app_dir="$(dirname "$app_path")"
           app_name="$(basename "$app_path")"
-          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Runner-release-nocodesign.app.zip)
+          if [ "$app_name" != "Pocket Memory Pet.app" ]; then
+            echo "Unexpected iOS release app bundle: $app_name"
+            exit 1
+          fi
+          echo "IOS_RELEASE_APP_BUNDLE=$app_name" >> "$GITHUB_ENV"
+          (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Pocket-Memory-Pet-release-nocodesign.app.zip)
+          unzip -l build/ios/iphoneos/Pocket-Memory-Pet-release-nocodesign.app.zip | head -n 20
 
       - name: Upload iOS release no-codesign app
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ios-release-nocodesign-app-${{ github.run_number }}
-          path: build/ios/iphoneos/Runner-release-nocodesign.app.zip
+          path: build/ios/iphoneos/Pocket-Memory-Pet-release-nocodesign.app.zip
           if-no-files-found: error
           retention-days: 14
 
@@ -161,7 +173,11 @@ jobs:
             echo "branch=${{ github.ref_name }}"
             echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
             echo "simulator_app_artifact=ios-simulator-app-${{ github.run_number }}"
+            echo "simulator_zip=Pocket-Memory-Pet-simulator.app.zip"
+            echo "simulator_app_bundle=${IOS_SIMULATOR_APP_BUNDLE:-unknown}"
             echo "release_nocodesign_artifact=ios-release-nocodesign-app-${{ github.run_number }}"
+            echo "release_nocodesign_zip=Pocket-Memory-Pet-release-nocodesign.app.zip"
+            echo "release_nocodesign_app_bundle=${IOS_RELEASE_APP_BUNDLE:-unknown}"
             echo "build_commands=flutter build ios --simulator --no-codesign; flutter build ios --release --no-codesign"
             echo
             flutter --version

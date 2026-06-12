@@ -38,7 +38,7 @@ Capture these app states:
 
 ## Status
 
-CI generates 1x draft widget screenshots through `flutter test --update-goldens tool/store_screenshot_test.dart` and uploads them as a `store-screenshot-drafts-*` artifact from the Flutter CI workflow.
+CI generates 1x draft widget screenshots through `flutter test --update-goldens tool/store_screenshot_test.dart`, validates the expected PNG names and dimensions with `python3 tool/validate_store_screenshots.py`, and uploads them as a `store-screenshot-drafts-*` artifact from the Flutter CI workflow.
 
 Final screenshots still require simulator/device review, platform-specific framing, and visual QA before store submission.
 

@@ -19,9 +19,9 @@ Use the latest successful Native Build workflow run for these artifacts. Paste t
 
 - Android debug APK: `adb install -r app-debug.apk`
 - iOS simulator app:
-  - `unzip Runner-simulator.app.zip`
+  - `unzip Pocket-Memory-Pet-simulator.app.zip`
   - `xcrun simctl boot <device-id>`
-  - `xcrun simctl install booted Runner.app`
+  - `xcrun simctl install booted "Pocket Memory Pet.app"`
   - `xcrun simctl launch booted com.wellnessmaker.pocketmemorypet`
 
 ## Device Matrix

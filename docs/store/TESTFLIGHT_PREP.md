@@ -39,9 +39,9 @@ Before archiving, confirm the `version` line in `pubspec.yaml` has a monotonical
 1. Open the latest successful Native Build workflow run.
 2. Download `ios-simulator-app-<run_number>`.
 3. Download `ios-qa-manifest-<run_number>` and copy the manifest values into `docs/qa/MANUAL_QA_LOG.md`.
-4. Unzip `Runner-simulator.app.zip` on a macOS machine with Xcode installed.
+4. Unzip `Pocket-Memory-Pet-simulator.app.zip` on a macOS machine with Xcode installed.
 5. Boot the target simulator.
-6. Install the app with `xcrun simctl install booted Runner.app`.
+6. Install the app with `xcrun simctl install booted "Pocket Memory Pet.app"`.
 7. Launch and record results in `docs/qa/MANUAL_QA_LOG.md`.
 
 ## Review Notes Draft
