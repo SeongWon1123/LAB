@@ -7,37 +7,51 @@ Manual QA must be run on real devices or simulators before store submission. Do 
 - Commit:
 - Date:
 - Tester:
-- Android build artifact:
-- iOS build artifact:
+- Android debug APK artifact: `android-debug-apk-<run_number>`
+- Android release AAB artifact: `android-release-aab-<run_number>`
+- iOS simulator app artifact: `ios-simulator-app-<run_number>`
+- iOS no-codesign release artifact: `ios-release-nocodesign-app-<run_number>`
+- QA manifest artifacts: `android-qa-manifest-<run_number>`, `ios-qa-manifest-<run_number>`
+
+Use the latest successful Native Build workflow run for these artifacts. Paste the manifest values into this section before QA starts. The iOS simulator app artifact is for simulator QA only, and the no-codesign release artifact is a build gate only; TestFlight still requires a signed archive from an Apple Developer account.
+
+## Install Commands
+
+- Android debug APK: `adb install -r app-debug.apk`
+- iOS simulator app:
+  - `unzip Runner-simulator.app.zip`
+  - `xcrun simctl boot <device-id>`
+  - `xcrun simctl install booted Runner.app`
+  - `xcrun simctl launch booted com.wellnessmaker.pocketmemorypet`
 
 ## Device Matrix
 
-| Platform | Device | OS Version | Result | Notes |
-| --- | --- | --- | --- | --- |
-| Android | Small 360x800 class |  | Not run |  |
-| Android | Large phone |  | Not run |  |
-| Android | Samsung physical device |  | Not run |  |
-| iOS | iPhone SE class |  | Not run |  |
-| iOS | iPhone 15/16 class |  | Not run |  |
+| Platform | Device | OS Version | Evidence | Result | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Android | Small 360x800 class |  | Screenshot or screen recording | Not run |  |
+| Android | Large phone |  | Screenshot or screen recording | Not run |  |
+| Android | Samsung physical device |  | Screenshot or screen recording | Not run |  |
+| iOS | iPhone SE class |  | Screenshot or screen recording | Not run |  |
+| iOS | iPhone 15/16 class |  | Screenshot or screen recording | Not run |  |
 
 ## Scenarios
 
-| Scenario | Result | Notes |
-| --- | --- | --- |
-| First install opens onboarding | Not run |  |
-| Empty pet name is blocked | Not run |  |
-| Pet name saves and hatch flow starts | Not run |  |
-| Home screen has no overflow | Not run |  |
-| Meal/snack/clean/sleep actions update state | Not run |  |
-| Jump Star win/loss returns to pet reward flow | Not run |  |
-| Diary entries appear after care and growth | Not run |  |
-| App restart preserves state | Not run |  |
-| One-hour elapsed-time simulation updates state | Not run |  |
-| Two-day offline cap does not punish beyond 48 hours | Not run |  |
-| Notification permission denial keeps app usable | Not run |  |
-| Notification permission approval schedules reminders | Not run |  |
-| Sound toggle disables effects | Not run |  |
-| Reset local pet data works | Not run |  |
+| Scenario | Expected Result | Evidence | Result | Notes |
+| --- | --- | --- | --- | --- |
+| First install opens onboarding | Onboarding screen appears without crash or overflow. | Screenshot | Not run |  |
+| Empty pet name is blocked | Continue action shows validation and stays on onboarding. | Screenshot | Not run |  |
+| Pet name saves and hatch flow starts | Entering `Cloudy` opens hatch screen and then home. | Screen recording | Not run |  |
+| Home screen has no overflow | LCD pet, stat text, and three buttons fit on target screen. | Screenshot | Not run |  |
+| Meal/snack/clean/sleep actions update state | Selected care action changes the visible pet state or stats. | Screen recording | Not run |  |
+| Jump Star win/loss returns to pet reward flow | Mini-game completes and returns without crash; diary/state updates. | Screen recording | Not run |  |
+| Diary entries appear after care and growth | Diary shows recent care or growth entries in reverse chronology. | Screenshot | Not run |  |
+| App restart preserves state | Closing and reopening keeps pet name, stage, stats, settings, and diary. | Screen recording | Not run |  |
+| One-hour elapsed-time simulation updates state | After time advance/reopen, elapsed care simulation is visible. | Notes plus screenshot | Not run |  |
+| Two-day offline cap does not punish beyond 48 hours | Long offline interval is capped and pet remains recoverable. | Notes plus screenshot | Not run |  |
+| Notification permission denial keeps app usable | Denying permission keeps settings usable and does not block care flow. | Screen recording | Not run |  |
+| Notification permission approval schedules reminders | Approval enables reminders and settings reflects enabled state. | Screenshot | Not run |  |
+| Sound toggle disables effects | Sound disabled state persists and no care/play effects are heard. | Tester note | Not run |  |
+| Reset local pet data works | Reset clears pet state and returns to first-run flow. | Screen recording | Not run |  |
 
 ## Release Decision
 

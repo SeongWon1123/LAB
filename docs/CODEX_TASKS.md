@@ -53,3 +53,5 @@
 - [x] Add store metadata and privacy form drafts.
 - [x] Add screenshot, TestFlight, and manual QA preparation docs.
 - [x] Add CI-generated draft store screenshot artifacts.
+- [x] Upload native QA build artifacts from CI.
+- [x] Add iOS no-codesign release build gate and QA manifests.

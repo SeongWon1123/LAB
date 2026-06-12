@@ -30,8 +30,54 @@ jobs:
       - name: Build debug APK
         run: flutter build apk --debug
 
+      - name: Upload debug APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk-${{ github.run_number }}
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Build release AAB
         run: flutter build appbundle --release
+
+      - name: Upload release AAB
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-aab-${{ github.run_number }}
+          path: build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Write Android QA manifest
+        if: always()
+        run: |
+          mkdir -p build/qa
+          {
+            echo "workflow=Native Build"
+            echo "job=android"
+            echo "run_number=${{ github.run_number }}"
+            echo "run_id=${{ github.run_id }}"
+            echo "commit=${{ github.sha }}"
+            echo "branch=${{ github.ref_name }}"
+            echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "debug_apk_artifact=android-debug-apk-${{ github.run_number }}"
+            echo "release_aab_artifact=android-release-aab-${{ github.run_number }}"
+            echo "build_commands=flutter build apk --debug; flutter build appbundle --release"
+            echo
+            flutter --version
+          } > build/qa/android-manifest.txt
+
+      - name: Upload Android QA manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-qa-manifest-${{ github.run_number }}
+          path: build/qa/android-manifest.txt
+          if-no-files-found: error
+          retention-days: 14
 
   ios-simulator:
     runs-on: macos-latest
@@ -54,3 +100,62 @@ jobs:
 
       - name: Build iOS simulator
         run: flutter build ios --simulator --no-codesign
+
+      - name: Package iOS simulator app
+        run: |
+          cd build/ios/iphonesimulator
+          ditto -c -k --keepParent Runner.app Runner-simulator.app.zip
+
+      - name: Upload iOS simulator app
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-app-${{ github.run_number }}
+          path: build/ios/iphonesimulator/Runner-simulator.app.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Build iOS release without signing
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS release app
+        run: |
+          cd build/ios/iphoneos
+          ditto -c -k --keepParent Runner.app Runner-release-nocodesign.app.zip
+
+      - name: Upload iOS release no-codesign app
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release-nocodesign-app-${{ github.run_number }}
+          path: build/ios/iphoneos/Runner-release-nocodesign.app.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Write iOS QA manifest
+        if: always()
+        run: |
+          mkdir -p build/qa
+          {
+            echo "workflow=Native Build"
+            echo "job=ios"
+            echo "run_number=${{ github.run_number }}"
+            echo "run_id=${{ github.run_id }}"
+            echo "commit=${{ github.sha }}"
+            echo "branch=${{ github.ref_name }}"
+            echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "simulator_app_artifact=ios-simulator-app-${{ github.run_number }}"
+            echo "release_nocodesign_artifact=ios-release-nocodesign-app-${{ github.run_number }}"
+            echo "build_commands=flutter build ios --simulator --no-codesign; flutter build ios --release --no-codesign"
+            echo
+            flutter --version
+          } > build/qa/ios-manifest.txt
+
+      - name: Upload iOS QA manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-qa-manifest-${{ github.run_number }}
+          path: build/qa/ios-manifest.txt
+          if-no-files-found: error
+          retention-days: 14

@@ -41,3 +41,15 @@ Capture these app states:
 CI generates 1x draft widget screenshots through `flutter test --update-goldens tool/store_screenshot_test.dart` and uploads them as a `store-screenshot-drafts-*` artifact from the Flutter CI workflow.
 
 Final screenshots still require simulator/device review, platform-specific framing, and visual QA before store submission.
+
+## Approval Matrix
+
+| File | Source | Required State | Visual QA | Final Export | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `01_onboarding.png` | CI draft plus simulator/device capture | Pet name field visible with safe sample name | Not run | Not exported | Use real onboarding UI in final capture. |
+| `02_hatch.png` | CI draft plus simulator/device capture | Named pet ready to hatch | Not run | Not exported | Confirm no debug banner. |
+| `03_home.png` | CI draft plus simulator/device capture | LCD pet, stats, and three-button shell visible | Not run | Not exported | Must fit on smallest target. |
+| `04_status.png` | CI draft plus simulator/device capture | Gauges readable | Not run | Not exported | Check text contrast. |
+| `05_jump_star.png` | CI draft plus simulator/device capture | Mini-game active and readable | Not run | Not exported | Prefer deterministic mid-game state. |
+| `06_diary.png` | CI draft plus simulator/device capture | Multiple diary entries visible | Not run | Not exported | Avoid personal data. |
+| `07_settings.png` | CI draft plus simulator/device capture | Reminder and sound settings visible | Not run | Not exported | Avoid permission dialogs unless required. |
