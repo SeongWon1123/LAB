@@ -26,7 +26,7 @@ The app may ask for notification permission to show local reminders. Denying per
 
 ## Contact
 
-- Support contact: TODO before submission.
-- Hosted privacy policy URL: TODO before submission.
+- Support page: `https://seongwon1123.github.io/LAB/support/`.
+- Hosted privacy policy URL: `https://seongwon1123.github.io/LAB/privacy/`.
 
-This draft can be hosted as the store privacy policy after the support contact and URL are finalized.
+The hosted privacy policy is generated from `site/privacy/index.html` and deployed by the Pages workflow.

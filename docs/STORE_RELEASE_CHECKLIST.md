@@ -28,6 +28,11 @@
 
 Use only original app positioning and the legal disclaimer from README.
 
+## Store URLs
+
+- Privacy policy URL: `https://seongwon1123.github.io/LAB/privacy/`.
+- Support URL: `https://seongwon1123.github.io/LAB/support/`.
+
 ## Manual QA
 
 Record release QA in `docs/qa/MANUAL_QA_LOG.md`.

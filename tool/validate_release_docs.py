@@ -39,6 +39,11 @@ REQUIRED_RELEASE_REFERENCES = [
     "store-screenshot-drafts-<run_number>",
 ]
 
+REQUIRED_STORE_URLS = [
+    "https://seongwon1123.github.io/LAB/privacy/",
+    "https://seongwon1123.github.io/LAB/support/",
+]
+
 
 def read(relative_path: Path) -> str:
     return (ROOT / relative_path).read_text(encoding="utf-8")
@@ -68,6 +73,13 @@ def main() -> int:
         if reference not in combined_docs:
             errors.append(f"Missing release artifact reference: {reference}")
 
+    for url in REQUIRED_STORE_URLS:
+        if url not in combined_docs:
+            errors.append(f"Missing store URL: {url}")
+
+    if "TODO before submission" in combined_docs:
+        errors.append("Release docs still contain TODO before submission.")
+
     workflow = read(Path(".github/workflows/native-build.yml"))
     if "Runner-simulator.app.zip" in workflow:
         errors.append("Native workflow must not use stale Runner-simulator.app.zip.")
@@ -77,6 +89,12 @@ def main() -> int:
         errors.append("Native workflow must upload Pocket-Memory-Pet-simulator.app.zip.")
     if "Pocket-Memory-Pet-release-nocodesign.app.zip" not in workflow:
         errors.append("Native workflow must upload Pocket-Memory-Pet-release-nocodesign.app.zip.")
+
+    pages_workflow = read(Path(".github/workflows/pages.yml"))
+    if "actions/deploy-pages@v5" not in pages_workflow:
+        errors.append("Pages workflow must deploy with actions/deploy-pages@v5.")
+    if "tool/validate_static_site.py" not in pages_workflow:
+        errors.append("Pages workflow must validate the static site before deployment.")
 
     if errors:
         print("Release document validation failed:")

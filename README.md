@@ -80,6 +80,11 @@ The no-codesign iOS release build is a signing-independent gate only. TestFlight
 - Android package name target: `com.wellnessmaker.pocketmemorypet`
 - iOS bundle ID target: `com.wellnessmaker.pocketmemorypet`
 
+## Store Support
+
+- Privacy policy: `https://seongwon1123.github.io/LAB/privacy/`
+- Support page: `https://seongwon1123.github.io/LAB/support/`
+
 ## Legal Position
 
 Pocket Memory Pet is an original retro digital pet app. It is not affiliated with, endorsed by, or sponsored by any existing toy or game brand. All characters, sounds, interface elements, and visual assets are original or must be used under appropriate licenses.

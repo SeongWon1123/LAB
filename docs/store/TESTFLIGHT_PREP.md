@@ -51,6 +51,6 @@ Pocket Memory Pet is a local-first pixel pet app. No account is required. Local 
 ## Blockers Before External TestFlight
 
 - Apple Developer account access.
-- Hosted privacy policy URL.
+- Confirm the GitHub Pages privacy policy is live at `https://seongwon1123.github.io/LAB/privacy/`.
 - Final screenshots.
 - Manual QA pass on at least one iOS simulator or device.

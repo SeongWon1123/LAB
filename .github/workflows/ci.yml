@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -24,6 +24,9 @@ jobs:
 
       - name: Validate release docs
         run: python3 tool/validate_release_docs.py
+
+      - name: Validate static site
+        run: python3 tool/validate_static_site.py
 
       - name: Analyze
         run: flutter analyze
@@ -39,7 +42,7 @@ jobs:
 
       - name: Upload draft store screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: store-screenshot-drafts-${{ github.run_number }}
           path: build/store_screenshots/**/*.png

@@ -47,5 +47,5 @@ No account is required. If notification permission is denied, the app remains fu
 ## Required Before Submission
 
 - Confirm final binary still has no tracking, analytics, ads, or network-based data collection.
-- Add the hosted privacy policy URL in App Store Connect.
-- Add final support contact information.
+- Add `https://seongwon1123.github.io/LAB/privacy/` in App Store Connect.
+- Add `https://seongwon1123.github.io/LAB/support/` as the support URL.

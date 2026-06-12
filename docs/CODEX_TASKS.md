@@ -55,3 +55,4 @@
 - [x] Add CI-generated draft store screenshot artifacts.
 - [x] Upload native QA build artifacts from CI.
 - [x] Add iOS no-codesign release build gate and QA manifests.
+- [x] Add GitHub Pages privacy and support site deployment.

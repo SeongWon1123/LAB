@@ -57,6 +57,11 @@ Do not use third-party brand names, product names, or trademark-adjacent phrases
 - The pet state, diary, and settings are stored locally on device.
 - The MVP has no ads, in-app purchases, social features, chat, or user-generated content.
 
+## Store URLs
+
+- Privacy policy URL: `https://seongwon1123.github.io/LAB/privacy/`.
+- Support URL: `https://seongwon1123.github.io/LAB/support/`.
+
 ## Content Rating Notes
 
 - Cartoon/pixel pet care only.
@@ -67,7 +72,6 @@ Do not use third-party brand names, product names, or trademark-adjacent phrases
 
 ## Required Before Submission
 
-- Hosted privacy policy URL.
-- Support contact email or support page URL.
+- Verify the GitHub Pages deployment is live.
 - Final screenshots from real device or simulator builds.
 - Final app icon review in platform masks.
