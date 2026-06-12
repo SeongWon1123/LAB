@@ -75,20 +75,21 @@ void main() {
     ),
   ];
 
-  for (final size in sizes) {
-    for (final capture in captures) {
-      testWidgets('generates ${size.name}/${capture.name}', (tester) async {
+  testWidgets('generates draft store screenshots', (tester) async {
+    try {
+      for (final size in sizes) {
         tester.view.devicePixelRatio = 1;
         tester.view.physicalSize = size.logicalSize;
-        addTearDown(() {
-          tester.view.resetPhysicalSize();
-          tester.view.resetDevicePixelRatio();
-        });
 
-        await _captureScreen(tester, size, capture);
-      });
+        for (final capture in captures) {
+          await _captureScreen(tester, size, capture);
+        }
+      }
+    } finally {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
     }
-  }
+  });
 }
 
 Future<void> _captureScreen(
@@ -128,9 +129,6 @@ Future<void> _captureScreen(
   final output = File('build/store_screenshots/${size.name}/${capture.name}.png');
   output.parent.createSync(recursive: true);
   output.writeAsBytesSync(bytes);
-
-  await tester.pumpWidget(const SizedBox.shrink());
-  await tester.pump();
 }
 
 Future<void> _pauseJumpStar(WidgetTester tester) async {
