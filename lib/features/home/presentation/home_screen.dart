@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pocket_memory_pet/core/theme/app_theme.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
+import 'package:pocket_memory_pet/features/pet/domain/pet_enums.dart';
 import 'package:pocket_memory_pet/features/pet/domain/pet_state.dart';
 import 'package:pocket_memory_pet/shared/buttons/three_button_pad.dart';
 import 'package:pocket_memory_pet/shared/layout/retro_screen_scaffold.dart';
