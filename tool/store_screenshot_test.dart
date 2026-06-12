@@ -75,21 +75,21 @@ void main() {
     ),
   ];
 
-  testWidgets('generates draft store screenshots', (tester) async {
-    try {
-      for (final size in sizes) {
+  for (final size in sizes) {
+    for (final capture in captures) {
+      testWidgets('generates ${size.name}/${capture.name}', (tester) async {
         tester.view.devicePixelRatio = 1;
         tester.view.physicalSize = size.logicalSize;
 
-        for (final capture in captures) {
-          await _captureScreen(tester, size, capture);
-        }
-      }
-    } finally {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        await _captureScreen(tester, size, capture);
+      });
     }
-  });
+  }
 }
 
 class _OnboardingDraftScreen extends StatelessWidget {
