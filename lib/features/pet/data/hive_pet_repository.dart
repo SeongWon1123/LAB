@@ -4,14 +4,14 @@ import 'package:pocket_memory_pet/features/pet/domain/pet_repository.dart';
 import 'package:pocket_memory_pet/features/pet/domain/pet_session.dart';
 
 class HivePetRepository implements PetRepository {
-  const HivePetRepository._(this._box);
+  const HivePetRepository(this._box);
 
   final Box<dynamic> _box;
 
   static Future<HivePetRepository> open() async {
     await Hive.initFlutter();
     final box = await Hive.openBox<dynamic>(StorageKeys.sessionBox);
-    return HivePetRepository._(box);
+    return HivePetRepository(box);
   }
 
   @override

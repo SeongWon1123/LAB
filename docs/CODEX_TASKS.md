@@ -41,3 +41,9 @@
 - [x] Add Android debug APK build job.
 - [x] Add Android release AAB build job.
 - [x] Add iOS simulator build job.
+
+## Reliability Follow-Up
+
+- [x] Refresh elapsed time when the app resumes.
+- [x] Add Hive repository save/load/reset integration test.
+- [x] Add notification pre-permission explanation flow.

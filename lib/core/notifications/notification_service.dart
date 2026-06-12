@@ -1,4 +1,9 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final notificationServiceProvider = Provider<NotificationService>(
+  (ref) => NotificationService(),
+);
 
 class NotificationPolicy {
   const NotificationPolicy();
@@ -23,15 +28,25 @@ class NotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin;
   final NotificationPolicy policy = const NotificationPolicy();
+  bool _initialized = false;
 
   Future<void> initialize() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const ios = DarwinInitializationSettings();
+    const ios = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
     const settings = InitializationSettings(android: android, iOS: ios);
     await _plugin.initialize(settings: settings);
+    _initialized = true;
   }
 
   Future<bool> requestPermission() async {
+    if (!_initialized) {
+      await initialize();
+    }
+
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     final androidGranted = await android?.requestNotificationsPermission();
@@ -41,6 +56,13 @@ class NotificationService {
     final iosGranted = await ios?.requestPermissions(alert: true, badge: true, sound: true);
 
     return androidGranted ?? iosGranted ?? false;
+  }
+
+  Future<void> cancelAll() async {
+    if (!_initialized) {
+      await initialize();
+    }
+    await _plugin.cancelAll();
   }
 
   List<String> reminderMessages() {
