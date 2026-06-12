@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pocket_memory_pet/core/audio/sound_service.dart';
 import 'package:pocket_memory_pet/core/theme/app_theme.dart';
 import 'package:pocket_memory_pet/features/minigame/presentation/jump_star_game.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
@@ -101,6 +104,11 @@ class _PlayScreenState extends ConsumerState<PlayScreen> {
   void _handleFinished(JumpStarResult result) {
     if (!mounted || _result != null) {
       return;
+    }
+    final session = ref.read(petControllerProvider);
+    if (session.soundEnabled) {
+      final soundService = ref.read(soundServiceProvider);
+      unawaited(result.won ? soundService.playWin() : soundService.playMiss());
     }
     ref.read(petControllerProvider.notifier).play(won: result.won);
     setState(() {

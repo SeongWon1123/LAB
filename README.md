@@ -11,6 +11,7 @@ Pocket Memory Pet is an original, local-first retro pixel pet app for iOS and An
 - Three-button navigation and selection
 - Meal, snack, play, clean, sleep, and wake care actions
 - Jump Star Flame mini-game with pet-care rewards
+- Original short beep effects and haptic feedback
 - UTC-based elapsed-time simulation capped at 48 offline hours
 - Growth stages and automatic diary entries
 - Hive CE local persistence through repository interfaces

@@ -29,10 +29,9 @@
 
 ## Remaining
 
-- Run Flutter SDK validation on a machine with Flutter installed.
-- Generate native Android/iOS folders with `flutter create --platforms=android,ios .` if needed.
 - Add app icon and splash assets.
-- Add original sound effects and haptics.
+- Prepare store screenshots and metadata.
+- Prepare TestFlight upload on an Apple Developer account.
 - Run manual device QA.
 
 ## Native Build Verification
@@ -50,3 +49,4 @@
 - [x] Add onboarding validation for empty pet names.
 - [x] Add local reminder scheduling policy and settings integration.
 - [x] Replace Jump Star placeholder with a playable Flame mini-game.
+- [x] Add original short sound effects and haptics.

@@ -2,7 +2,7 @@
 
 ## Current State
 
-The MVP currently uses code-drawn placeholder visuals only.
+The MVP currently uses code-drawn placeholder visuals and original generated WAV effects.
 
 ## Rules
 
@@ -15,7 +15,6 @@ The MVP currently uses code-drawn placeholder visuals only.
 
 - Pixel pet sprites for growth stages.
 - Tiny status icons.
-- Beep and care sounds.
 - App icon.
 - Splash placeholder.
 - Store screenshots.

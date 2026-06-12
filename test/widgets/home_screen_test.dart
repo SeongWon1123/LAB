@@ -10,7 +10,10 @@ void main() {
   testWidgets('HomeScreen renders retro device and changes menu', (tester) async {
     final now = DateTime.parse('2026-06-12T00:00:00Z');
     final base = PetSession.initial(now);
-    final session = base.copyWith(pet: base.pet.copyWith(name: 'Cloudy'));
+    final session = base.copyWith(
+      pet: base.pet.copyWith(name: 'Cloudy'),
+      soundEnabled: false,
+    );
 
     await tester.pumpWidget(
       ProviderScope(

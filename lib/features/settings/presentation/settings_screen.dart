@@ -29,7 +29,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           SwitchListTile(
             title: const Text('Sound'),
-            subtitle: const Text('Placeholder until original sounds are added.'),
+            subtitle: const Text('Soft beeps and haptics for buttons and care.'),
             value: session.soundEnabled,
             onChanged: (value) => controller.setSoundEnabled(enabled: value),
           ),

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pocket_memory_pet/core/audio/sound_service.dart';
 import 'package:pocket_memory_pet/core/theme/app_theme.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
 import 'package:pocket_memory_pet/features/pet/domain/pet_enums.dart';
@@ -110,6 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _previousMenu() {
+    _playButtonSound();
     final menus = HomeMenu.values;
     setState(() {
       _selected = menus[(_selected.index - 1 + menus.length) % menus.length];
@@ -117,6 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _nextMenu() {
+    _playButtonSound();
     final menus = HomeMenu.values;
     setState(() {
       _selected = menus[(_selected.index + 1) % menus.length];
@@ -127,30 +132,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final controller = ref.read(petControllerProvider.notifier);
     switch (_selected) {
       case HomeMenu.meal:
+        _playCareSound();
         controller.feedMeal();
         break;
       case HomeMenu.snack:
+        _playCareSound();
         controller.feedSnack();
         break;
       case HomeMenu.play:
+        _playButtonSound();
         context.go('/play');
         break;
       case HomeMenu.clean:
+        _playCareSound();
         controller.cleanRoom();
         break;
       case HomeMenu.sleep:
+        _playCareSound();
         controller.toggleSleep();
         break;
       case HomeMenu.status:
+        _playButtonSound();
         context.go('/status');
         break;
       case HomeMenu.diary:
+        _playButtonSound();
         context.go('/diary');
         break;
       case HomeMenu.settings:
+        _playButtonSound();
         context.go('/settings');
         break;
     }
+  }
+
+  void _playButtonSound() {
+    if (!ref.read(petControllerProvider).soundEnabled) {
+      return;
+    }
+    unawaited(ref.read(soundServiceProvider).playButton());
+  }
+
+  void _playCareSound() {
+    if (!ref.read(petControllerProvider).soundEnabled) {
+      return;
+    }
+    unawaited(ref.read(soundServiceProvider).playCare());
   }
 }
 
