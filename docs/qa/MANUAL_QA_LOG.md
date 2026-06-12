@@ -10,10 +10,11 @@ Manual QA must be run on real devices or simulators before store submission. Do 
 - Android debug APK artifact: `android-debug-apk-<run_number>`
 - Android release AAB artifact: `android-release-aab-<run_number>`
 - iOS simulator app artifact: `ios-simulator-app-<run_number>`
+- iOS simulator smoke artifact: `ios-simulator-smoke-<run_number>`
 - iOS no-codesign release artifact: `ios-release-nocodesign-app-<run_number>`
 - QA manifest artifacts: `android-qa-manifest-<run_number>`, `ios-qa-manifest-<run_number>`
 
-Use the latest successful Native Build workflow run for these artifacts. Paste the manifest values into this section before QA starts. The iOS simulator app artifact is for simulator QA only, and the no-codesign release artifact is a build gate only; TestFlight still requires a signed archive from an Apple Developer account.
+Use the latest successful Native Build workflow run for these artifacts. Paste the manifest values, file sizes, and SHA-256 checksums into this section before QA starts. The iOS simulator app artifact is for simulator QA only, the smoke artifact proves CI install/launch only, and the no-codesign release artifact is a build gate only; TestFlight still requires a signed archive from an Apple Developer account.
 
 ## Install Commands
 

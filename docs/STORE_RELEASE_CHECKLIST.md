@@ -41,5 +41,8 @@ Use the latest successful Native Build workflow artifacts for installable QA bui
 - `android-debug-apk-<run_number>` for Android device smoke testing.
 - `android-release-aab-<run_number>` for Play Console upload rehearsal.
 - `ios-simulator-app-<run_number>` for iOS simulator smoke testing.
+- `ios-simulator-smoke-<run_number>` for CI install/launch smoke evidence.
 - `ios-release-nocodesign-app-<run_number>` for signing-independent iOS release build verification.
 - `android-qa-manifest-<run_number>` and `ios-qa-manifest-<run_number>` for commit/run traceability.
+
+The QA manifests include file sizes and SHA-256 checksums for native build artifacts. Use these values to verify downloaded files before manual QA or store upload rehearsal.

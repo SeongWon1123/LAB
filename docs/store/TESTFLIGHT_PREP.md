@@ -4,7 +4,7 @@
 
 The native build workflow verifies that an iOS simulator build can be generated from this repo. TestFlight upload still requires Apple Developer Program access and signing.
 
-The latest successful Native Build workflow uploads `ios-simulator-app-<run_number>` for simulator smoke testing and `ios-release-nocodesign-app-<run_number>` as a signing-independent release build gate. These artifacts are not TestFlight archives and cannot be uploaded to App Store Connect.
+The latest successful Native Build workflow uploads `ios-simulator-app-<run_number>` for simulator smoke testing, `ios-simulator-smoke-<run_number>` for CI install/launch evidence, and `ios-release-nocodesign-app-<run_number>` as a signing-independent release build gate. These artifacts are not TestFlight archives and cannot be uploaded to App Store Connect.
 
 ## Required External Setup
 
@@ -38,7 +38,7 @@ Before archiving, confirm the `version` line in `pubspec.yaml` has a monotonical
 
 1. Open the latest successful Native Build workflow run.
 2. Download `ios-simulator-app-<run_number>`.
-3. Download `ios-qa-manifest-<run_number>` and copy the manifest values into `docs/qa/MANUAL_QA_LOG.md`.
+3. Download `ios-simulator-smoke-<run_number>` and `ios-qa-manifest-<run_number>`, then copy the manifest values into `docs/qa/MANUAL_QA_LOG.md`.
 4. Unzip `Pocket-Memory-Pet-simulator.app.zip` on a macOS machine with Xcode installed.
 5. Boot the target simulator.
 6. Install the app with `xcrun simctl install booted "Pocket Memory Pet.app"`.

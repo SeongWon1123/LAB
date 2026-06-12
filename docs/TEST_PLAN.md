@@ -35,3 +35,7 @@ Use `docs/qa/MANUAL_QA_LOG.md` as the release QA record.
 - iPhone SE class simulator/device: install `ios-simulator-app-<run_number>` on simulator or a signed device build and verify small-screen fit.
 - iPhone 15/16 class simulator/device: verify normal-size iOS layout, app restart, and storage persistence.
 - First install, name entry, hatch, care actions, Jump Star, diary, restart after one hour, restart after two days, notification denied/approved, sound toggle, and data reset must each include screenshot, screen recording, or tester notes as evidence.
+
+## CI Smoke Evidence
+
+The Native Build workflow installs and launches the iOS simulator artifact in CI and uploads `ios-simulator-smoke-<run_number>`. This proves the simulator bundle can launch, but it does not replace the manual QA matrix above.

@@ -34,6 +34,7 @@ REQUIRED_RELEASE_REFERENCES = [
     "android-release-aab-<run_number>",
     "android-qa-manifest-<run_number>",
     "ios-simulator-app-<run_number>",
+    "ios-simulator-smoke-<run_number>",
     "ios-release-nocodesign-app-<run_number>",
     "ios-qa-manifest-<run_number>",
     "store-screenshot-drafts-<run_number>",

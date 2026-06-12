@@ -55,6 +55,8 @@ jobs:
         if: always()
         run: |
           mkdir -p build/qa
+          debug_apk="build/app/outputs/flutter-apk/app-debug.apk"
+          release_aab="build/app/outputs/bundle/release/app-release.aab"
           {
             echo "workflow=Native Build"
             echo "job=android"
@@ -64,7 +66,13 @@ jobs:
             echo "branch=${{ github.ref_name }}"
             echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
             echo "debug_apk_artifact=android-debug-apk-${{ github.run_number }}"
+            echo "debug_apk_path=$debug_apk"
+            echo "debug_apk_size_bytes=$(stat -c%s "$debug_apk")"
+            echo "debug_apk_sha256=$(sha256sum "$debug_apk" | awk '{print $1}')"
             echo "release_aab_artifact=android-release-aab-${{ github.run_number }}"
+            echo "release_aab_path=$release_aab"
+            echo "release_aab_size_bytes=$(stat -c%s "$release_aab")"
+            echo "release_aab_sha256=$(sha256sum "$release_aab" | awk '{print $1}')"
             echo "build_commands=flutter build apk --debug; flutter build appbundle --release"
             echo
             flutter --version
@@ -80,7 +88,7 @@ jobs:
           retention-days: 14
 
   ios-simulator:
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout
@@ -117,6 +125,7 @@ jobs:
             exit 1
           fi
           echo "IOS_SIMULATOR_APP_BUNDLE=$app_name" >> "$GITHUB_ENV"
+          echo "IOS_SIMULATOR_APP_PATH=$app_path" >> "$GITHUB_ENV"
           (cd "$app_dir" && ditto -c -k --keepParent "$app_name" Pocket-Memory-Pet-simulator.app.zip)
           unzip -l build/ios/iphonesimulator/Pocket-Memory-Pet-simulator.app.zip | head -n 20
 
@@ -160,10 +169,118 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Smoke launch iOS simulator app
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          bundle_id="com.wellnessmaker.pocketmemorypet"
+          app_path="${IOS_SIMULATOR_APP_PATH:?missing IOS_SIMULATOR_APP_PATH}"
+          smoke_log="build/qa/ios-simulator-smoke.txt"
+          mkdir -p build/qa
+
+          launch_result="failed"
+          launch_output=""
+          device_id=""
+          device_name=""
+          actual_bundle_id="unknown"
+
+          cleanup() {
+            code=$?
+            {
+              echo "workflow=Native Build"
+              echo "job=ios"
+              echo "run_number=${{ github.run_number }}"
+              echo "run_id=${{ github.run_id }}"
+              echo "commit=${{ github.sha }}"
+              echo "branch=${{ github.ref_name }}"
+              echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              echo "simulator_device=${device_name:-unknown}"
+              echo "simulator_udid=${device_id:-unknown}"
+              echo "app_bundle=${IOS_SIMULATOR_APP_BUNDLE:-unknown}"
+              echo "bundle_id=$bundle_id"
+              echo "actual_bundle_id=$actual_bundle_id"
+              echo "launch_result=$launch_result"
+              echo "launch_output=$(printf '%s' "$launch_output" | tr '\n' ' ')"
+            } > "$smoke_log"
+            echo "IOS_SIMULATOR_LAUNCH_RESULT=$launch_result" >> "$GITHUB_ENV"
+            echo "IOS_SIMULATOR_LAUNCH_DEVICE=${device_name:-unknown}" >> "$GITHUB_ENV"
+            echo "IOS_SIMULATOR_LAUNCH_UDID=${device_id:-unknown}" >> "$GITHUB_ENV"
+            if [ -n "${device_id:-}" ]; then
+              xcrun simctl terminate "$device_id" "$bundle_id" || true
+              xcrun simctl shutdown "$device_id" || true
+            fi
+            exit "$code"
+          }
+          trap cleanup EXIT
+
+          if [ ! -d "$app_path" ]; then
+            echo "iOS simulator app path does not exist: $app_path"
+            exit 1
+          fi
+
+          actual_bundle_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app_path/Info.plist")"
+          if [ "$actual_bundle_id" != "$bundle_id" ]; then
+            echo "Unexpected bundle id: $actual_bundle_id"
+            exit 1
+          fi
+
+          xcrun simctl list --json devices available > build/qa/simctl-devices.json
+          device_info="$(python3 - <<'PY'
+import json
+from pathlib import Path
+
+data = json.loads(Path("build/qa/simctl-devices.json").read_text(encoding="utf-8"))
+preferred: list[tuple[str, str, str]] = []
+fallback: list[tuple[str, str, str]] = []
+for runtime, devices in data.get("devices", {}).items():
+    if "iOS" not in runtime:
+        continue
+    for device in devices:
+        name = device.get("name", "")
+        udid = device.get("udid", "")
+        state = device.get("state", "")
+        device_type = device.get("deviceTypeIdentifier", "")
+        if not (device.get("isAvailable") and udid and ("iPhone" in device_type or name.startswith("iPhone"))):
+            continue
+        record = (udid, name, state)
+        if state == "Shutdown":
+            preferred.append(record)
+        else:
+            fallback.append(record)
+devices = preferred or fallback
+if devices:
+    print("\t".join(devices[0]))
+PY
+)"
+          if [ -z "$device_info" ]; then
+            echo "No available iPhone simulator found."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          IFS=$'\t' read -r device_id device_name device_state <<< "$device_info"
+          echo "Booting simulator: $device_name ($device_id, $device_state)"
+          xcrun simctl boot "$device_id" || true
+          xcrun simctl bootstatus "$device_id" -b
+          xcrun simctl install "$device_id" "$app_path"
+          launch_output="$(xcrun simctl launch "$device_id" "$bundle_id" 2>&1)"
+          sleep 5
+          launch_result="passed"
+
+      - name: Upload iOS simulator smoke log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-simulator-smoke-${{ github.run_number }}
+          path: build/qa/ios-simulator-smoke.txt
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Write iOS QA manifest
         if: always()
         run: |
           mkdir -p build/qa
+          simulator_zip="build/ios/iphonesimulator/Pocket-Memory-Pet-simulator.app.zip"
+          release_zip="build/ios/iphoneos/Pocket-Memory-Pet-release-nocodesign.app.zip"
           {
             echo "workflow=Native Build"
             echo "job=ios"
@@ -174,9 +291,17 @@ jobs:
             echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
             echo "simulator_app_artifact=ios-simulator-app-${{ github.run_number }}"
             echo "simulator_zip=Pocket-Memory-Pet-simulator.app.zip"
+            echo "simulator_zip_size_bytes=$(stat -f%z "$simulator_zip")"
+            echo "simulator_zip_sha256=$(shasum -a 256 "$simulator_zip" | awk '{print $1}')"
             echo "simulator_app_bundle=${IOS_SIMULATOR_APP_BUNDLE:-unknown}"
+            echo "simulator_smoke_artifact=ios-simulator-smoke-${{ github.run_number }}"
+            echo "simulator_launch_result=${IOS_SIMULATOR_LAUNCH_RESULT:-not_run}"
+            echo "simulator_launch_device=${IOS_SIMULATOR_LAUNCH_DEVICE:-unknown}"
+            echo "simulator_launch_udid=${IOS_SIMULATOR_LAUNCH_UDID:-unknown}"
             echo "release_nocodesign_artifact=ios-release-nocodesign-app-${{ github.run_number }}"
             echo "release_nocodesign_zip=Pocket-Memory-Pet-release-nocodesign.app.zip"
+            echo "release_nocodesign_zip_size_bytes=$(stat -f%z "$release_zip")"
+            echo "release_nocodesign_zip_sha256=$(shasum -a 256 "$release_zip" | awk '{print $1}')"
             echo "release_nocodesign_app_bundle=${IOS_RELEASE_APP_BUNDLE:-unknown}"
             echo "build_commands=flutter build ios --simulator --no-codesign; flutter build ios --release --no-codesign"
             echo
