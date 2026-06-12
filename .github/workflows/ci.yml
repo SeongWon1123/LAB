@@ -40,11 +40,16 @@ jobs:
       - name: Validate draft store screenshots
         run: python3 tool/validate_store_screenshots.py
 
+      - name: Generate draft store screenshot manifest
+        run: python3 tool/generate_store_screenshot_manifest.py
+
       - name: Upload draft store screenshots
-        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: store-screenshot-drafts-${{ github.run_number }}
-          path: build/store_screenshots/**/*.png
+          path: |
+            build/store_screenshots/**/*.png
+            build/store_screenshots/store_screenshot_manifest.json
+            build/store_screenshots/store_screenshot_manifest.txt
           if-no-files-found: error
           retention-days: 14

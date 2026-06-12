@@ -63,7 +63,7 @@ The repository also includes a native build workflow that generates Android/iOS 
 - iOS release build without code signing
 - Android/iOS QA manifest artifacts
 
-The Flutter CI workflow verifies `flutter analyze`, `flutter test`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`.
+The Flutter CI workflow verifies `flutter analyze`, `flutter test`, and CI-generated draft store screenshots uploaded as `store-screenshot-drafts-<run_number>`. That artifact also includes `store_screenshot_manifest.json` and `store_screenshot_manifest.txt` with file sizes and SHA-256 checksums.
 
 For iOS:
 

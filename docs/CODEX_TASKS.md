@@ -57,3 +57,4 @@
 - [x] Add iOS no-codesign release build gate and QA manifests.
 - [x] Add GitHub Pages privacy and support site deployment.
 - [x] Add iOS simulator launch smoke gate and native artifact checksums.
+- [x] Add draft store screenshot manifests with checksums.

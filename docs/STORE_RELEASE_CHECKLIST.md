@@ -11,6 +11,7 @@
 - Use `docs/store/STORE_METADATA.md` for copy.
 - Use `docs/store/DATA_SAFETY_DRAFT.md` for the Data safety form.
 - Use `docs/store/SCREENSHOT_CAPTURE_PLAN.md` before final screenshot capture.
+- Use `store_screenshot_manifest.json` from the latest `store-screenshot-drafts-<run_number>` artifact to verify draft screenshot file names, sizes, and SHA-256 checksums.
 
 ## iOS
 

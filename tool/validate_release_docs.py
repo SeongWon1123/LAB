@@ -38,6 +38,8 @@ REQUIRED_RELEASE_REFERENCES = [
     "ios-release-nocodesign-app-<run_number>",
     "ios-qa-manifest-<run_number>",
     "store-screenshot-drafts-<run_number>",
+    "store_screenshot_manifest.json",
+    "store_screenshot_manifest.txt",
 ]
 
 REQUIRED_STORE_URLS = [
