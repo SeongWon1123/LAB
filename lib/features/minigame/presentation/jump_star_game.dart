@@ -335,7 +335,7 @@ class JumpStarGame extends FlameGame with TapCallbacks {
         text: text,
         style: TextStyle(
           color: _pixelDark,
-          fontFamily: 'monospace',
+          fontFamily: 'VT323',
           fontSize: 12,
           fontWeight: bold ? FontWeight.w900 : FontWeight.w600,
         ),

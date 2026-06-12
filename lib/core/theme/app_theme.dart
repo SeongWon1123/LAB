@@ -32,7 +32,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.cloudWhite,
-      fontFamily: 'monospace',
+      fontFamily: 'VT323',
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         backgroundColor: Colors.transparent,

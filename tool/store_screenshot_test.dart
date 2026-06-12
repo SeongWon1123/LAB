@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:pocket_memory_pet/core/theme/app_theme.dart';
 import 'package:pocket_memory_pet/features/diary/presentation/diary_screen.dart';
 import 'package:pocket_memory_pet/features/hatch/presentation/hatch_screen.dart';
@@ -21,6 +22,9 @@ import 'package:pocket_memory_pet/shared/layout/retro_screen_scaffold.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(() async {
+    await loadAppFonts();
+  });
 
   final sizes = <_ScreenshotSize>[
     const _ScreenshotSize(

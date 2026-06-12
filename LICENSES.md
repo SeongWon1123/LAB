@@ -13,7 +13,9 @@ These PNG files were procedurally generated for Pocket Memory Pet in this reposi
 
 ## Fonts
 
-The MVP currently uses platform default fonts only.
+- `assets/fonts/VT323-Regular.ttf`
+
+VT323 is distributed by Google Fonts under the SIL Open Font License 1.1. The full license text is included at `assets/fonts/VT323-OFL.txt`.
 
 ## Audio
 
