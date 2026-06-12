@@ -170,7 +170,7 @@ class NotificationService {
     final count = NotificationPolicy.reminderCancellationDays *
         NotificationPolicy.maxDailyNotifications;
     for (var offset = 0; offset < count; offset += 1) {
-      await _plugin.cancel(NotificationPolicy.reminderNotificationBaseId + offset);
+      await _plugin.cancel(id: NotificationPolicy.reminderNotificationBaseId + offset);
     }
   }
 
