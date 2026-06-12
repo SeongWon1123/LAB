@@ -38,4 +38,6 @@ Capture these app states:
 
 ## Status
 
-Final screenshots require a Flutter runtime, simulator/device, and visual QA. This repository currently contains the capture plan only.
+CI generates draft widget screenshots through `tool/store_screenshot_test.dart` and uploads them as a `store-screenshot-drafts-*` artifact from the Flutter CI workflow.
+
+Final screenshots still require simulator/device review, platform-specific framing, and visual QA before store submission.

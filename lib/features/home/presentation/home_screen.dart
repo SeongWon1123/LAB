@@ -219,14 +219,14 @@ class _LcdPanel extends StatelessWidget {
                         _StatusIcon(label: 'H', active: pet.hunger > 35),
                         _StatusIcon(label: 'C', active: pet.cleanliness > 35),
                         _StatusIcon(label: 'E', active: pet.energy > 35),
-                        _StatusIcon(label: '♥', active: pet.health > 45),
+                        _StatusIcon(label: 'HP', active: pet.health > 45),
                       ],
                     ),
                     const Spacer(),
                     PixelPet(stage: pet.stage, isSleeping: pet.isSleeping, isSick: pet.isSick),
                     const Spacer(),
                     Text(
-                      '${pet.nameOrFallback} · ${pet.stage.label} · ${pet.ageHours}h',
+                      '${pet.nameOrFallback} / ${pet.stage.label} / ${pet.ageHours}h',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: AppColors.lcdPixelDark,

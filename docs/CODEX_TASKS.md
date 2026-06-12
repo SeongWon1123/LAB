@@ -29,7 +29,7 @@
 
 ## Remaining
 
-- Capture final store screenshots.
+- Review and export final store screenshots from simulator/device captures.
 - Prepare TestFlight upload on an Apple Developer account.
 - Run manual device QA.
 
@@ -52,3 +52,4 @@
 - [x] Add generated app icon and splash source assets.
 - [x] Add store metadata and privacy form drafts.
 - [x] Add screenshot, TestFlight, and manual QA preparation docs.
+- [x] Add CI-generated draft store screenshot artifacts.

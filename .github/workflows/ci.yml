@@ -27,3 +27,15 @@ jobs:
 
       - name: Test
         run: flutter test
+
+      - name: Generate draft store screenshots
+        run: flutter test tool/store_screenshot_test.dart
+
+      - name: Upload draft store screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-screenshot-drafts-${{ github.run_number }}
+          path: build/store_screenshots/**/*.png
+          if-no-files-found: error
+          retention-days: 14

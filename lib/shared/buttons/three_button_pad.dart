@@ -27,6 +27,7 @@ class _ThreeButtonPadState extends State<ThreeButtonPad> {
       children: [
         _PadButton(
           label: 'Left',
+          symbol: '<',
           pressed: _pressedIndex == 0,
           onTapDown: () => setState(() => _pressedIndex = 0),
           onTapUp: () => setState(() => _pressedIndex = null),
@@ -34,6 +35,7 @@ class _ThreeButtonPadState extends State<ThreeButtonPad> {
         ),
         _PadButton(
           label: 'OK',
+          symbol: 'OK',
           pressed: _pressedIndex == 1,
           onTapDown: () => setState(() => _pressedIndex = 1),
           onTapUp: () => setState(() => _pressedIndex = null),
@@ -42,6 +44,7 @@ class _ThreeButtonPadState extends State<ThreeButtonPad> {
         ),
         _PadButton(
           label: 'Right',
+          symbol: '>',
           pressed: _pressedIndex == 2,
           onTapDown: () => setState(() => _pressedIndex = 2),
           onTapUp: () => setState(() => _pressedIndex = null),
@@ -55,6 +58,7 @@ class _ThreeButtonPadState extends State<ThreeButtonPad> {
 class _PadButton extends StatelessWidget {
   const _PadButton({
     required this.label,
+    required this.symbol,
     required this.pressed,
     required this.onTapDown,
     required this.onTapUp,
@@ -63,6 +67,7 @@ class _PadButton extends StatelessWidget {
   });
 
   final String label;
+  final String symbol;
   final bool pressed;
   final VoidCallback onTapDown;
   final VoidCallback onTapUp;
@@ -89,7 +94,7 @@ class _PadButton extends StatelessWidget {
               backgroundColor: pressed ? AppColors.shadowMauve : AppColors.lavenderButton,
               elevation: pressed ? 0 : 4,
             ),
-            child: Text(label == 'OK' ? '●' : '◀'.replaceFirst('◀', label == 'Left' ? '◀' : '▶')),
+            child: Text(symbol),
           ),
         ),
       ),
