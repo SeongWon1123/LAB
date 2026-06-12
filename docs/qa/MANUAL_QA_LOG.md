@@ -4,19 +4,44 @@ Manual QA must be run on real devices or simulators before store submission. Do 
 
 ## Build Under Test
 
-- Commit:
-- Date:
-- Tester:
-- Android debug APK artifact: `android-debug-apk-<run_number>`
-- Android release AAB artifact: `android-release-aab-<run_number>`
-- Android emulator smoke artifact: `android-emulator-smoke-<run_number>`
-- iOS simulator app artifact: `ios-simulator-app-<run_number>`
-- iOS simulator smoke artifact: `ios-simulator-smoke-<run_number>`
-- iOS no-codesign release artifact: `ios-release-nocodesign-app-<run_number>`
-- Brand asset artifact: `brand-assets-<run_number>`
-- Release evidence artifact: `release-evidence-<run_number>`
-- QA manifest artifacts: `android-qa-manifest-<run_number>`, `ios-qa-manifest-<run_number>`
+- Commit: `492bf803bf1055576dc7e97d22bff15f5490731c`
+- Date: `2026-06-13 KST` (`2026-06-12T15:36:13Z` evidence generation)
+- Tester: To be assigned
+- Android debug APK artifact: `android-debug-apk-30`
+- Android release AAB artifact: `android-release-aab-30`
+- Android emulator smoke artifact: `android-emulator-smoke-30`
+- iOS simulator app artifact: `ios-simulator-app-30`
+- iOS simulator smoke artifact: `ios-simulator-smoke-30`
+- iOS no-codesign release artifact: `ios-release-nocodesign-app-30`
+- Brand asset artifact: `brand-assets-33`
+- Draft store screenshot artifact: `store-screenshot-drafts-33`
+- Release evidence artifact: `release-evidence-2`
+- QA manifest artifacts: `android-qa-manifest-30`, `ios-qa-manifest-30`
 - Release artifact verification report: `release_artifact_report.txt`
+
+## Automated Evidence Snapshot
+
+This section records CI evidence only. It does not replace the manual device matrix or scenarios below.
+
+| Evidence | Result |
+| --- | --- |
+| Flutter CI run 33 | Passed: `https://github.com/SeongWon1123/LAB/actions/runs/27424911000` |
+| Native Build run 30 | Passed: `https://github.com/SeongWon1123/LAB/actions/runs/27424911007` |
+| Release Evidence run 2 | Passed: `https://github.com/SeongWon1123/LAB/actions/runs/27425939448` |
+| Android emulator launch | `passed` with package `com.wellnessmaker.pocketmemorypet` |
+| iOS simulator launch | `passed` |
+| Brand assets verified | `4` files |
+| Draft store screenshots verified | `14` files |
+| Privacy URL | HTTP 200 at `https://seongwon1123.github.io/LAB/privacy/` on `2026-06-13 KST` |
+| Support URL | HTTP 200 at `https://seongwon1123.github.io/LAB/support/` on `2026-06-13 KST` |
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Android debug APK | `5993e3bc9acbd9828e07220ab66c68a4a9c03213402c96671c666febfcff05d4` |
+| Android release AAB | `3bdec481202450fb0c6e386e720e7b2c78a1d55b5fd0ec6d4eb2c11b5140e8a6` |
+| Android emulator smoke screenshot | `bafdf6cec936d252f989cf8b97261233ae0433f777ac9c158c44960a6b9a6c32` |
+| iOS simulator app zip | `2a709a8ffbcd8733588eef18b77a9557f24c739fabff8cf5ae3d85f28594ac4e` |
+| iOS release no-codesign zip | `91fc9c7decc7cf9978ffffe39adad34d398d9ee54e8edabeee651d58ccfe122e` |
 
 Use the latest successful Native Build workflow run for installable artifacts and the latest successful Flutter CI workflow run for `brand-assets-<run_number>`. Paste the native manifest values plus `brand_asset_manifest.json` or `brand_asset_manifest.txt` values, file sizes, and SHA-256 checksums into this section before QA starts. Android and iOS smoke artifacts prove CI install/launch only, the iOS simulator app artifact is for simulator QA only, and the no-codesign release artifact is a build gate only; TestFlight still requires a signed archive from an Apple Developer account.
 

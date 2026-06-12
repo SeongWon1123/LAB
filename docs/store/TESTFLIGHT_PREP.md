@@ -6,6 +6,11 @@ The native build workflow verifies that an iOS simulator build can be generated 
 
 The latest successful Native Build workflow uploads `ios-simulator-app-<run_number>` for simulator smoke testing, `ios-simulator-smoke-<run_number>` for CI install/launch evidence, and `ios-release-nocodesign-app-<run_number>` as a signing-independent release build gate. These artifacts are not TestFlight archives and cannot be uploaded to App Store Connect.
 
+## Verified Store URLs
+
+- Privacy policy URL: `https://seongwon1123.github.io/LAB/privacy/` returned HTTP 200 on `2026-06-13 KST`.
+- Support URL: `https://seongwon1123.github.io/LAB/support/` returned HTTP 200 on `2026-06-13 KST`.
+
 ## Required External Setup
 
 - Apple Developer Program membership.
@@ -51,6 +56,5 @@ Pocket Memory Pet is a local-first pixel pet app. No account is required. Local 
 ## Blockers Before External TestFlight
 
 - Apple Developer account access.
-- Confirm the GitHub Pages privacy policy is live at `https://seongwon1123.github.io/LAB/privacy/`.
 - Final screenshots.
 - Manual QA pass on at least one iOS simulator or device.
