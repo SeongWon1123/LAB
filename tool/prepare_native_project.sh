@@ -30,10 +30,40 @@ if [[ -f android/app/build.gradle.kts ]]; then
   patch_file android/app/build.gradle.kts 'namespace = ".*"' "namespace = \"$APP_ID\""
   patch_file android/app/build.gradle.kts 'applicationId = ".*"' "applicationId = \"$APP_ID\""
   patch_file android/app/build.gradle.kts 'minSdk = flutter.minSdkVersion' 'minSdk = 23'
+  "$PYTHON_BIN" - <<'PY'
+from pathlib import Path
+
+path = Path("android/app/build.gradle.kts")
+text = path.read_text(encoding="utf-8")
+if "isCoreLibraryDesugaringEnabled" not in text:
+    text = text.replace(
+        "compileOptions {\n",
+        "compileOptions {\n        isCoreLibraryDesugaringEnabled = true\n",
+        1,
+    )
+if "coreLibraryDesugaring(" not in text:
+    text += '\n\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")\n}\n'
+path.write_text(text, encoding="utf-8")
+PY
 elif [[ -f android/app/build.gradle ]]; then
   patch_file android/app/build.gradle "namespace ['\"].*['\"]" "namespace '$APP_ID'"
   patch_file android/app/build.gradle "applicationId ['\"].*['\"]" "applicationId '$APP_ID'"
   patch_file android/app/build.gradle 'minSdkVersion flutter.minSdkVersion' 'minSdkVersion 23'
+  "$PYTHON_BIN" - <<'PY'
+from pathlib import Path
+
+path = Path("android/app/build.gradle")
+text = path.read_text(encoding="utf-8")
+if "coreLibraryDesugaringEnabled" not in text:
+    text = text.replace(
+        "compileOptions {\n",
+        "compileOptions {\n        coreLibraryDesugaringEnabled true\n",
+        1,
+    )
+if "coreLibraryDesugaring " not in text:
+    text += "\n\ndependencies {\n    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'\n}\n"
+path.write_text(text, encoding="utf-8")
+PY
 fi
 
 "$PYTHON_BIN" - <<'PY'
