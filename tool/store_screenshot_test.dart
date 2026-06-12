@@ -12,7 +12,6 @@ import 'package:pocket_memory_pet/features/hatch/presentation/hatch_screen.dart'
 import 'package:pocket_memory_pet/features/home/presentation/home_screen.dart';
 import 'package:pocket_memory_pet/features/minigame/presentation/jump_star_game.dart';
 import 'package:pocket_memory_pet/features/minigame/presentation/play_screen.dart';
-import 'package:pocket_memory_pet/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:pocket_memory_pet/features/pet/application/pet_controller.dart';
 import 'package:pocket_memory_pet/features/pet/data/in_memory_pet_repository.dart';
 import 'package:pocket_memory_pet/features/pet/domain/diary_entry.dart';
@@ -20,6 +19,7 @@ import 'package:pocket_memory_pet/features/pet/domain/pet_enums.dart';
 import 'package:pocket_memory_pet/features/pet/domain/pet_session.dart';
 import 'package:pocket_memory_pet/features/settings/presentation/settings_screen.dart';
 import 'package:pocket_memory_pet/features/status/presentation/status_screen.dart';
+import 'package:pocket_memory_pet/shared/layout/retro_screen_scaffold.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ void main() {
   final captures = <_ScreenCapture>[
     _ScreenCapture(
       name: '01_onboarding',
-      builder: (_) => const OnboardingScreen(),
+      builder: (_) => const _OnboardingDraftScreen(),
       sessionBuilder: _onboardingSession,
     ),
     _ScreenCapture(
@@ -90,6 +90,71 @@ void main() {
       tester.view.resetDevicePixelRatio();
     }
   });
+}
+
+class _OnboardingDraftScreen extends StatelessWidget {
+  const _OnboardingDraftScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return RetroScreenScaffold(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(28),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Container(
+              padding: const EdgeInsets.all(22),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.76),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Pocket Memory Pet',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: AppColors.retroBrown,
+                          fontWeight: FontWeight.w900,
+                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'A tiny LCD friend is waiting inside a soft pastel desk toy.',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: AppColors.dustGray,
+                          height: 1.4,
+                        ),
+                  ),
+                  const SizedBox(height: 24),
+                  InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Pet name',
+                      filled: true,
+                    ),
+                    child: Text(
+                      'Cloudy',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: AppColors.retroBrown,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  FilledButton(
+                    onPressed: () {},
+                    child: const Text('Find the tiny friend'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Future<void> _captureScreen(
