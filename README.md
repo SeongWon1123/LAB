@@ -1,0 +1,69 @@
+# Pocket Memory Pet
+
+Pocket Memory Pet is an original, local-first retro pixel pet app for iOS and Android. It focuses on a warm desk-toy feeling, a soft LCD-style screen, three-button care, offline growth, local diary entries, and no backend in the MVP.
+
+## MVP Scope
+
+- Onboarding with pet naming
+- Hatch flow
+- Home screen with an original rounded pocket-toy shell
+- LCD-style pixel pet display
+- Three-button navigation and selection
+- Meal, snack, play, clean, sleep, and wake care actions
+- UTC-based elapsed-time simulation capped at 48 offline hours
+- Growth stages and automatic diary entries
+- Hive CE local persistence through repository interfaces
+- Local notification service scaffold that tolerates denied permissions
+- Flutter tests for model, time, care, repository, and home UI behavior
+
+## Out Of Scope For MVP
+
+No server, Firebase, login, ads, in-app purchases, social features, ranking, chat, AR, random draws, UGC, or community features.
+
+## Requirements
+
+- Flutter SDK with Dart
+- Android Studio or Xcode for device builds
+- Android SDK target that satisfies current Google Play requirements
+
+This machine currently does not have `flutter` or `dart` on `PATH`, so local analyze/test/build commands could not be executed here.
+
+## Run
+
+```bash
+flutter pub get
+flutter run
+```
+
+If native platform folders are missing because this repository was scaffolded without a local Flutter SDK, generate them once:
+
+```bash
+flutter create --platforms=android,ios .
+```
+
+Then keep the existing `lib/`, `test/`, `docs/`, `pubspec.yaml`, and project documents.
+
+## Verify
+
+```bash
+flutter analyze
+flutter test
+flutter build apk --debug
+flutter build appbundle --release
+```
+
+For iOS:
+
+```bash
+flutter run -d ios
+flutter build ios --simulator
+```
+
+## Package IDs
+
+- Android package name target: `com.wellnessmaker.pocketmemorypet`
+- iOS bundle ID target: `com.wellnessmaker.pocketmemorypet`
+
+## Legal Position
+
+Pocket Memory Pet is an original retro digital pet app. It is not affiliated with, endorsed by, or sponsored by any existing toy or game brand. All characters, sounds, interface elements, and visual assets are original or must be used under appropriate licenses.
