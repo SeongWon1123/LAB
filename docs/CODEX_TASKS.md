@@ -34,3 +34,10 @@
 - Add app icon and splash assets.
 - Expand Flame mini-game.
 - Run manual device QA.
+
+## Native Build Verification
+
+- [x] Add CI script to generate Android/iOS platform folders.
+- [x] Add Android debug APK build job.
+- [x] Add Android release AAB build job.
+- [x] Add iOS simulator build job.

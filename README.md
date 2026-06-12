@@ -38,10 +38,10 @@ flutter run
 If native platform folders are missing because this repository was scaffolded without a local Flutter SDK, generate them once:
 
 ```bash
-flutter create --platforms=android,ios .
+bash tool/prepare_native_project.sh
 ```
 
-Then keep the existing `lib/`, `test/`, `docs/`, `pubspec.yaml`, and project documents.
+The script runs `flutter create`, then applies the required Android package name and iOS bundle ID.
 
 ## Verify
 
@@ -51,6 +51,12 @@ flutter test
 flutter build apk --debug
 flutter build appbundle --release
 ```
+
+The repository also includes a native build workflow that generates Android/iOS platform folders in CI and verifies:
+
+- Android debug APK
+- Android release AAB
+- iOS simulator build
 
 For iOS:
 
